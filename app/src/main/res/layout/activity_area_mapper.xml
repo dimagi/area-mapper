@@ -14,7 +14,8 @@
         <TextView
             android:id="@+id/textview_area"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="0.0 sq m" />
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapview"

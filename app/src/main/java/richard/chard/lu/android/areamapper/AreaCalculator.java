@@ -1,6 +1,8 @@
 package richard.chard.lu.android.areamapper;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.maps.android.SphericalUtil;
 
 import java.util.ArrayList;
 
@@ -28,7 +30,14 @@ public class AreaCalculator {
     public void addLatLng(LatLng latLng) {
         LOG.trace("Entry");
 
-        boundingLatLngs.add(latLng);
+        if (boundingLatLngs.size() == 0) {
+            boundingLatLngs.add(latLng);
+        }
+
+        boundingLatLngs.add(
+                boundingLatLngs.size() - 1,
+                latLng
+        );
 
         listener.onAreaChange(latLng, getArea());
 
@@ -36,7 +45,15 @@ public class AreaCalculator {
     }
 
     public double getArea() {
-        return 0;
+        if (boundingLatLngs.size() > 3) {
+            return SphericalUtil.computeArea(boundingLatLngs);
+        } else {
+            return 0;
+        }
+    }
+
+    public PolygonOptions getPolygonOptions() {
+        return new PolygonOptions().addAll(boundingLatLngs);
     }
 
 }
