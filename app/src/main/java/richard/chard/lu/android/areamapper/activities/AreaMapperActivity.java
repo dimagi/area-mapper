@@ -16,6 +16,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 
 import richard.chard.lu.android.areamapper.AreaCalculator;
+import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.R;
 import richard.chard.lu.android.areamapper.ResultCode;
 
@@ -25,6 +26,8 @@ import richard.chard.lu.android.areamapper.ResultCode;
 public class AreaMapperActivity extends ActionBarActivity
         implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, AreaCalculator.Listener {
+
+    private static final Logger LOG = Logger.create(AreaMapperActivity.class);
 
     public static final String EXTRA_KEY_MODE = "area_mapper_mode";
 
@@ -51,23 +54,31 @@ public class AreaMapperActivity extends ActionBarActivity
 
     @Override
     public void onBackPressed() {
+        LOG.trace("Entry");
 
         setResult(ResultCode.CANCEL);
         finish();
 
+        LOG.trace("Exit");
     }
 
     @Override
     public void onAreaChange(LatLng latLng, double area) {
+        LOG.trace("Entry, area={}", area);
+
         // TODO
         map.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
                         latLng,
                         MAP_INITIAL_ZOOM_LEVEL));
+
+        LOG.trace("Exit");
     }
 
     @Override
     public void onClick(View view) {
+        LOG.trace("Entry");
+
         switch (view.getId()) {
             case R.id.button_cancel:
 
@@ -108,10 +119,13 @@ public class AreaMapperActivity extends ActionBarActivity
             default:
                 throw new RuntimeException("Unknown view id: "+view.getId());
         }
+
+        LOG.trace("Exit");
     }
 
     @Override
     public void onConnected(Bundle bundle) {
+        LOG.trace("Entry");
 
         mapView.post(new Runnable() {
 
@@ -128,20 +142,27 @@ public class AreaMapperActivity extends ActionBarActivity
 
         });
 
+        LOG.trace("Exit");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        LOG.trace("Entry");
 
+        LOG.trace("Exit");
     }
 
     @Override
     public void onConnectionSuspended(int i) {
+        LOG.trace("Entry");
 
+        LOG.trace("Exit");
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        LOG.trace("Entry");
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_area_mapper);
@@ -161,27 +182,34 @@ public class AreaMapperActivity extends ActionBarActivity
                 .build();
 
         mapView.onCreate(savedInstanceState);
+
+        LOG.trace("Exit");
     }
 
     @Override
     public void onDestroy() {
+        LOG.trace("Entry");
 
         mapView.onDestroy();
 
         super.onDestroy();
 
+        LOG.trace("Exit");
     }
 
     @Override
     public void onLowMemory() {
+        LOG.trace("Entry");
 
         mapView.onLowMemory();
 
         super.onLowMemory();
 
+        LOG.trace("Exit");
     }
 
     protected void onMapAvailable() {
+        LOG.trace("Entry");
 
         MapsInitializer.initialize(getApplicationContext());
 
@@ -219,6 +247,7 @@ public class AreaMapperActivity extends ActionBarActivity
                 throw new RuntimeException("Unknown mode: "+getMode());
         }
 
+        LOG.trace("Exit");
     }
 
 //    @Override
@@ -274,6 +303,7 @@ public class AreaMapperActivity extends ActionBarActivity
 
     @Override
     public void onPause() {
+        LOG.trace("Entry");
 
         if (googleApiClient != null) {
             googleApiClient.disconnect();
@@ -283,10 +313,12 @@ public class AreaMapperActivity extends ActionBarActivity
 
         super.onPause();
 
+        LOG.trace("Exit");
     }
 
     @Override
     public void onResume() {
+        LOG.trace("Entry");
 
         super.onResume();
 
@@ -296,15 +328,18 @@ public class AreaMapperActivity extends ActionBarActivity
             googleApiClient.connect();
         }
 
+        LOG.trace("Exit");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        LOG.trace("Entry");
 
         super.onSaveInstanceState(outState);
 
         mapView.onSaveInstanceState(outState);
 
+        LOG.trace("Exit");
     }
 
 }

@@ -15,6 +15,8 @@ public class AreaCalculator {
 
     }
 
+    private static final Logger LOG = Logger.create(AreaCalculator.class);
+
     public AreaCalculator(Listener listener) {
         this.listener = listener;
     }
@@ -24,11 +26,13 @@ public class AreaCalculator {
     private Listener listener;
 
     public void addLatLng(LatLng latLng) {
+        LOG.trace("Entry");
 
         boundingLatLngs.add(latLng);
 
         listener.onAreaChange(latLng, getArea());
 
+        LOG.trace("Exit");
     }
 
     public double getArea() {
