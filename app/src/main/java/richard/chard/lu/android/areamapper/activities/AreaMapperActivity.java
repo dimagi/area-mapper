@@ -43,7 +43,8 @@ public class AreaMapperActivity extends ActionBarActivity
 
     private GoogleApiClient googleApiClient;
 
-    private boolean isStarted;
+    private boolean isCameraInitiallyPositioned;
+    private boolean isRecording;
 
     private GoogleMap map;
     private MapView mapView;
@@ -66,21 +67,32 @@ public class AreaMapperActivity extends ActionBarActivity
     public void onAreaChange(LatLng latLng, double area) {
         LOG.trace("Entry, area={}", area);
 
-        map.clear();
-        map.addPolygon(
-                areaCalculator.getPolygonOptions()
-        );
-        // TODO: vary
-        map.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                        latLng,
-                        MAP_INITIAL_ZOOM_LEVEL
-                )
-        );
+        if (!isCameraInitiallyPositioned) {
+            isCameraInitiallyPositioned = true;
 
-        textViewArea.setText(
-                getString(R.string.area_format, area)
-        );
+            map.moveCamera(
+                    CameraUpdateFactory.newLatLngZoom(
+                            latLng,
+                            MAP_INITIAL_ZOOM_LEVEL
+                    )
+            );
+
+            updateProgressState();
+        } else {
+
+            map.clear();
+            map.addPolygon(
+                    areaCalculator.getPolygonOptions()
+            );
+            map.moveCamera(
+                    CameraUpdateFactory.newLatLng(latLng)
+            );
+
+            textViewArea.setText(
+                    getString(R.string.area_format, area)
+            );
+
+        }
 
         LOG.trace("Exit");
     }
@@ -101,7 +113,7 @@ public class AreaMapperActivity extends ActionBarActivity
                 findViewById(R.id.button_start).setVisibility(View.GONE);
                 findViewById(R.id.button_stop).setVisibility(View.VISIBLE);
 
-                isStarted = true;
+                isRecording = true;
                 break;
 
             case R.id.button_stop:
@@ -110,7 +122,7 @@ public class AreaMapperActivity extends ActionBarActivity
                 findViewById(R.id.button_redo).setVisibility(View.VISIBLE);
                 findViewById(R.id.button_ok).setVisibility(View.VISIBLE);
 
-                isStarted = false;
+                isRecording = false;
 
                 LocationServices.FusedLocationApi.removeLocationUpdates(
                         googleApiClient,
@@ -165,20 +177,7 @@ public class AreaMapperActivity extends ActionBarActivity
                 this
         );
 
-        mapView.post(new Runnable() {
-
-            @Override
-            public void run() {
-                if (mapView.getMap() != null) {
-                    onMapAvailable();
-                } else {
-                    mapView.postDelayed(
-                            this,
-                            MAPVIEW_CHECK_DELAY);
-                }
-            }
-
-        });
+        updateProgressState();
 
         LOG.trace("Exit");
     }
@@ -219,6 +218,21 @@ public class AreaMapperActivity extends ActionBarActivity
 
         mapView = (MapView) findViewById(R.id.mapview);
 
+        mapView.post(new Runnable() {
+
+            @Override
+            public void run() {
+                if (mapView.getMap() != null) {
+                    onMapAvailable();
+                } else {
+                    mapView.postDelayed(
+                            this,
+                            MAPVIEW_CHECK_DELAY);
+                }
+            }
+
+        });
+
         googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -250,11 +264,13 @@ public class AreaMapperActivity extends ActionBarActivity
 
             boolean addLocation = previousLocation == null ||
                     (
-                            isStarted &&
+                            isRecording &&
                             location.distanceTo(previousLocation) > previousLocation.getAccuracy()
                     );
 
             if (addLocation) {
+
+                previousLocation = location;
 
                 areaCalculator.addLatLng(
                         new LatLng(
@@ -262,8 +278,6 @@ public class AreaMapperActivity extends ActionBarActivity
                                 location.getLongitude()
                         )
                 );
-
-                previousLocation = location;
             }
         }
 
@@ -286,14 +300,13 @@ public class AreaMapperActivity extends ActionBarActivity
 
         MapsInitializer.initialize(getApplicationContext());
 
-        findViewById(R.id.linearlayout_progressbar).setVisibility(View.GONE);
-        findViewById(R.id.linearlayout_areamapper).setVisibility(View.VISIBLE);
-
         map = mapView.getMap();
 
         map.getUiSettings().setAllGesturesEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(true);
         map.setMyLocationEnabled(true);
+
+        updateProgressState();
 
         LOG.trace("Exit");
     }
@@ -302,7 +315,7 @@ public class AreaMapperActivity extends ActionBarActivity
     public void onPause() {
         LOG.trace("Entry");
 
-        if (googleApiClient != null) {
+        if (googleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(
                     googleApiClient,
                     this
@@ -325,7 +338,7 @@ public class AreaMapperActivity extends ActionBarActivity
 
         mapView.onResume();
 
-        if (googleApiClient != null) {
+        if (!googleApiClient.isConnected()) {
             googleApiClient.connect();
         }
 
@@ -339,6 +352,30 @@ public class AreaMapperActivity extends ActionBarActivity
         super.onSaveInstanceState(outState);
 
         mapView.onSaveInstanceState(outState);
+
+        LOG.trace("Exit");
+    }
+
+    private void updateProgressState() {
+        LOG.trace("Entry");
+
+        if (map != null) {
+
+            if (mapView.getVisibility() == View.INVISIBLE) {
+
+                mapView.setVisibility(View.VISIBLE);
+                ((TextView) findViewById(R.id.textview_progress)).setText(R.string.loading_gps);
+
+            }
+
+            if (googleApiClient.isConnected() &&
+                    previousLocation != null) {
+
+                findViewById(R.id.linearlayout_progressbar).setVisibility(View.GONE);
+                findViewById(R.id.button_start).setEnabled(true);
+
+            }
+        }
 
         LOG.trace("Exit");
     }

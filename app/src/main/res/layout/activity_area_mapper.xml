@@ -1,94 +1,96 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="richard.chard.lu.android.areamapper.activities.AreaMapperActivity">
 
-    <LinearLayout
-        android:id="@+id/linearlayout_areamapper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible"
-        android:orientation="vertical" >
+    <TextView
+        android:id="@+id/textview_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/area_format" />
 
-        <TextView
-            android:id="@+id/textview_area"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/area_format" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapview"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="match_parent"
+            android:visibility="invisible" />
 
         <LinearLayout
+            android:id="@+id/linearlayout_progressbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#99ffffff"
+            android:gravity="center" >
 
-            <Button
-                android:id="@+id/button_cancel"
-                android:layout_width="0dp"
+            <TextView
+                android:id="@+id/textview_progress"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/cancel" />
+                android:text="@string/loading_map" />
 
-            <Button
-                android:id="@+id/button_start"
-                android:layout_width="0dp"
+            <ProgressBar
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/start" />
-
-            <Button
-                android:id="@+id/button_stop"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:visibility="gone"
-                android:text="@string/stop" />
-
-            <Button
-                android:id="@+id/button_redo"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:visibility="gone"
-                android:text="@string/redo" />
-
-            <Button
-                android:id="@+id/button_ok"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:visibility="gone"
-                android:text="@string/ok" />
+                style="?android:attr/progressBarStyleLarge" />
 
         </LinearLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/linearlayout_progressbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
-        <TextView
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/loading_gps" />
+            android:layout_weight="1"
+            android:text="@string/cancel" />
 
-        <ProgressBar
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/button_start"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleLarge" />
+            android:layout_weight="1"
+            android:enabled="false"
+            android:text="@string/start" />
+
+        <Button
+            android:id="@+id/button_stop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:text="@string/stop" />
+
+        <Button
+            android:id="@+id/button_redo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:text="@string/redo" />
+
+        <Button
+            android:id="@+id/button_ok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:text="@string/ok" />
 
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

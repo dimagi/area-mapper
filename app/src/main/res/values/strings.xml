@@ -4,7 +4,8 @@
     <string name="app_name">Area Mapper</string>
     <string name="area_format">%1$.3f sq m</string>
     <string name="cancel">Cancel</string>
-    <string name="loading_gps">Getting GPS signal&#8230;</string>
+    <string name="loading_gps">Waiting for GPS signal&#8230;</string>
+    <string name="loading_map">Loading map&#8230;</string>
     <string name="ok">OK</string>
     <string name="redo">Redo</string>
     <string name="start">Start</string>
