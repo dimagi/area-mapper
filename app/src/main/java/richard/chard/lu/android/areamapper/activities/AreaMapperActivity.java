@@ -42,7 +42,6 @@ public class AreaMapperActivity extends ActionBarActivity
     private static final long MAPVIEW_CHECK_DELAY = 200;
 
     public static final int MODE_WALK = 0;
-    public static final int MODE_DRAW = 1;
 
     private AreaCalculator areaCalculator = new AreaCalculator(this);
 
@@ -303,69 +302,12 @@ public class AreaMapperActivity extends ActionBarActivity
                 map.setMyLocationEnabled(true);
                 break;
 
-            case MODE_DRAW:
-
-//            map.setOnMapLongClickListener(this);
-//            map.setOnMarkerDragListener(this);
-                break;
-
             default:
                 throw new RuntimeException("Unknown mode: "+getMode());
         }
 
         LOG.trace("Exit");
     }
-
-//    @Override
-//    public void onMapLongClick(LatLng latLng) {
-//
-//        map.clear();
-//
-//        CircleOptions circleOptions = new CircleOptions()
-//                .center(latLng)
-//                .radius(selectedLocationRadius)
-//                .fillColor(Color.argb(150, 255, 0, 0));
-//
-//        selectionCircle = map
-//                .addCircle(circleOptions);
-//
-//        MarkerOptions markerOptions = new MarkerOptions()
-//                .flat(true)
-//                .draggable(true)
-//                .position(latLng);
-//
-//        Marker selectionMarker = map.addMarker(markerOptions);
-//        selectedLocation = selectionMarker.getPosition();
-//
-//        if (isLocationFrozen) {
-//            selectionMarker.setDraggable(false);
-//        } else {
-//            buttonSave.setEnabled(true);
-//        }
-//
-//        LOG.trace("Exit");
-//    }
-
-//    @Override
-//    public void onMarkerDragStart(Marker marker) {
-//        LOG.trace("Entry");
-//
-//        LOG.trace("Exit");
-//    }
-//
-//    @Override
-//    public void onMarkerDrag(Marker marker) {
-//        selectionCircle.setCenter(marker.getPosition());
-//    }
-//
-//    @Override
-//    public void onMarkerDragEnd(Marker marker) {
-//        LOG.trace("Entry");
-//
-//        selectedLocation = marker.getPosition();
-//
-//        LOG.trace("Exit");
-//    }
 
     @Override
     public void onPause() {

@@ -72,20 +72,6 @@ public class ModeSelectionActivity extends ActionBarActivity
                 );
                 break;
 
-            case R.id.button_draw:
-
-                startActivityForResult(
-                        new Intent(
-                                this,
-                                AreaMapperActivity.class
-                        ).putExtra(
-                                AreaMapperActivity.EXTRA_KEY_MODE,
-                                AreaMapperActivity.MODE_DRAW
-                        ),
-                        REQUEST_CODE_AREA
-                );
-                break;
-
             default:
                 throw new RuntimeException("Unknown view id: "+view.getId());
         }
@@ -103,7 +89,6 @@ public class ModeSelectionActivity extends ActionBarActivity
 
         findViewById(R.id.button_cancel).setOnClickListener(this);
         findViewById(R.id.button_walk).setOnClickListener(this);
-        findViewById(R.id.button_draw).setOnClickListener(this);
 
         LOG.trace("Exit");
     }

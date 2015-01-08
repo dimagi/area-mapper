@@ -3,7 +3,6 @@
 
     <string name="app_name">AreaMapper</string>
     <string name="cancel">Cancel</string>
-    <string name="draw">Draw</string>
     <string name="loading_gps">Getting GPS signal...</string>
     <string name="ok">OK</string>
     <string name="redo">Redo</string>
