@@ -1,5 +1,8 @@
 package richard.chard.lu.android.areamapper;
 
+import android.content.Context;
+import android.widget.ArrayAdapter;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.SphericalUtil;
@@ -42,6 +45,14 @@ public class AreaCalculator {
         listener.onAreaChange(latLng, getArea());
 
         LOG.trace("Exit");
+    }
+
+    public ArrayAdapter getArrayAdapter(Context context, int layoutId) {
+        return new ArrayAdapter<>(
+                context,
+                layoutId,
+                boundingLatLngs
+        );
     }
 
     public double getArea() {

@@ -24,6 +24,13 @@
             android:layout_height="match_parent"
             android:visibility="invisible" />
 
+        <ListView
+            android:id="@+id/listview_coordinates"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white_transparent"
+            android:visibility="invisible" />
+
         <LinearLayout
             android:id="@+id/linearlayout_progressbar"
             android:layout_width="match_parent"

@@ -14,5 +14,6 @@
     <color name="red_700">#D32F2F</color>
     <color name="red_900">#B71C1C</color>
     <color name="white">#FFFFFF</color>
+    <color name="white_transparent">#99FFFFFF</color>
 
 </resources>

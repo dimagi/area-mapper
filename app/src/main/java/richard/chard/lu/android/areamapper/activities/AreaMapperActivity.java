@@ -5,6 +5,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -141,6 +142,15 @@ public class AreaMapperActivity extends ActionBarActivity
                         googleApiClient,
                         this
                 );
+
+                ListView listViewCoordinates = (ListView) findViewById(R.id.listview_coordinates);
+                listViewCoordinates.setAdapter(
+                        areaCalculator.getArrayAdapter(
+                                this,
+                                android.R.layout.simple_list_item_1
+                        )
+                );
+                listViewCoordinates.setVisibility(View.VISIBLE);
                 break;
 
             case R.id.button_ok:
