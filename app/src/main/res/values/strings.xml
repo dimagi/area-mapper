@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AreaMapper</string>
+    <string name="app_name">Area Mapper</string>
+    <string name="area_format">%1$.3f sq m</string>
     <string name="cancel">Cancel</string>
-    <string name="loading_gps">Getting GPS signal...</string>
+    <string name="loading_gps">Getting GPS signal&#8230;</string>
     <string name="ok">OK</string>
     <string name="redo">Redo</string>
     <string name="start">Start</string>

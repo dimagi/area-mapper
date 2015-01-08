@@ -78,7 +78,9 @@ public class AreaMapperActivity extends ActionBarActivity
                 )
         );
 
-        textViewArea.setText(area+" sq m");
+        textViewArea.setText(
+                getString(R.string.area_format, area)
+        );
 
         LOG.trace("Exit");
     }
