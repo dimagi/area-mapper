@@ -23,7 +23,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.AreaMapperActivity" />
+            android:name=".activities.AreaMapperActivity"
+            android:keepScreenOn="true" />
 
         <meta-data
             android:name="com.google.android.gms.version"
