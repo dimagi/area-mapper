@@ -109,15 +109,28 @@ public class AreaMapperActivity extends ActionBarActivity
                 break;
 
             case R.id.button_start:
+            case R.id.button_resume:
 
                 findViewById(R.id.button_start).setVisibility(View.GONE);
+                findViewById(R.id.button_resume).setVisibility(View.GONE);
+                findViewById(R.id.button_pause).setVisibility(View.VISIBLE);
                 findViewById(R.id.button_stop).setVisibility(View.VISIBLE);
 
                 isRecording = true;
                 break;
 
+            case R.id.button_pause:
+
+                findViewById(R.id.button_pause).setVisibility(View.GONE);
+                findViewById(R.id.button_resume).setVisibility(View.VISIBLE);
+
+                isRecording = false;
+                break;
+
             case R.id.button_stop:
 
+                findViewById(R.id.button_resume).setVisibility(View.GONE);
+                findViewById(R.id.button_pause).setVisibility(View.GONE);
                 findViewById(R.id.button_stop).setVisibility(View.GONE);
                 findViewById(R.id.button_redo).setVisibility(View.VISIBLE);
                 findViewById(R.id.button_ok).setVisibility(View.VISIBLE);
@@ -210,6 +223,8 @@ public class AreaMapperActivity extends ActionBarActivity
 
         findViewById(R.id.button_cancel).setOnClickListener(this);
         findViewById(R.id.button_start).setOnClickListener(this);
+        findViewById(R.id.button_pause).setOnClickListener(this);
+        findViewById(R.id.button_resume).setOnClickListener(this);
         findViewById(R.id.button_stop).setOnClickListener(this);
         findViewById(R.id.button_redo).setOnClickListener(this);
         findViewById(R.id.button_ok).setOnClickListener(this);

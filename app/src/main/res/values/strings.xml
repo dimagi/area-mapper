@@ -7,7 +7,9 @@
     <string name="loading_gps">Waiting for GPS signal&#8230;</string>
     <string name="loading_map">Loading map&#8230;</string>
     <string name="ok">OK</string>
+    <string name="pause">Pause</string>
     <string name="redo">Redo</string>
+    <string name="resume">Resume</string>
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="walk">Walk</string>
