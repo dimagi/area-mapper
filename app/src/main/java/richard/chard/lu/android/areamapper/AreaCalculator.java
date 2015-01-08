@@ -53,7 +53,10 @@ public class AreaCalculator {
     }
 
     public PolygonOptions getPolygonOptions() {
-        return new PolygonOptions().addAll(boundingLatLngs);
+        return new PolygonOptions()
+                .addAll(boundingLatLngs)
+                .strokeColor(R.color.lightblue_900)
+                .fillColor(R.color.cyan_100_transparent);
     }
 
 }
