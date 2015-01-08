@@ -299,6 +299,7 @@ public class AreaMapperActivity extends ActionBarActivity
             case MODE_WALK:
 
                 map.getUiSettings().setAllGesturesEnabled(false);
+                map.getUiSettings().setZoomControlsEnabled(true);
                 map.setMyLocationEnabled(true);
                 break;
 
