@@ -128,8 +128,6 @@ public class AreaMapperActivity extends ActionBarActivity
                         googleApiClient,
                         this
                 );
-
-                // TODO: show full area on map
                 break;
 
             case R.id.button_ok:
@@ -186,12 +184,18 @@ public class AreaMapperActivity extends ActionBarActivity
     public void onConnectionFailed(ConnectionResult connectionResult) {
         LOG.trace("Entry");
 
+        setResult(ResultCode.ERROR);
+        finish();
+
         LOG.trace("Exit");
     }
 
     @Override
     public void onConnectionSuspended(int i) {
         LOG.trace("Entry");
+
+        setResult(ResultCode.CANCEL);
+        finish();
 
         LOG.trace("Exit");
     }

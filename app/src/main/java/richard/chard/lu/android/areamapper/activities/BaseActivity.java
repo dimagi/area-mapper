@@ -3,10 +3,8 @@ package richard.chard.lu.android.areamapper.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
 
 import richard.chard.lu.android.areamapper.Logger;
-import richard.chard.lu.android.areamapper.R;
 import richard.chard.lu.android.areamapper.ResultCode;
 
 public class BaseActivity extends ActionBarActivity {
@@ -21,28 +19,40 @@ public class BaseActivity extends ActionBarActivity {
                 requestCode,
                 resultCode);
 
-        if (requestCode == REQUEST_CODE_AREA) {
-            switch (resultCode) {
-                case ResultCode.CANCEL:
+        switch (requestCode) {
+            case REQUEST_CODE_AREA:
 
-                    setResult(ResultCode.CANCEL);
-                    finish();
-                    break;
+                switch (resultCode) {
+                    case ResultCode.CANCEL:
 
-                case ResultCode.OK:
+                        setResult(ResultCode.CANCEL);
+                        finish();
+                        break;
 
-                    setResult(ResultCode.OK, data);
-                    finish();
-                    break;
+                    case ResultCode.OK:
 
-                case ResultCode.REDO:
+                        setResult(ResultCode.OK, data);
+                        finish();
+                        break;
 
-                    startAreaMapperActivity();
-                    break;
+                    case ResultCode.REDO:
 
-                default:
-                    throw new RuntimeException("Unknown result code: "+resultCode);
-            }
+                        startAreaMapperActivity();
+                        break;
+
+                    case ResultCode.ERROR:
+
+                        setResult(ResultCode.ERROR);
+                        finish();
+                        break;
+
+                    default:
+                        throw new RuntimeException("Unknown result code: "+resultCode);
+                }
+                break;
+
+            default:
+                throw new RuntimeException("Unknown request code: "+requestCode);
         }
 
         LOG.trace("Exit");
