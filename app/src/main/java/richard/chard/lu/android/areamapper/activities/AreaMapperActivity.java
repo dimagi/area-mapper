@@ -5,6 +5,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -150,7 +151,21 @@ public class AreaMapperActivity extends ActionBarActivity
                                 android.R.layout.simple_list_item_1
                         )
                 );
+
+                mapView.getLayoutParams().width = mapView.getWidth();
+                listViewCoordinates.getLayoutParams().width = mapView.getWidth();
+
                 listViewCoordinates.setVisibility(View.VISIBLE);
+                listViewCoordinates.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((HorizontalScrollView) findViewById(R.id.scrollview_result))
+                                .smoothScrollBy(
+                                        mapView.getWidth()/10,
+                                        0
+                                );
+                    }
+                });
                 break;
 
             case R.id.button_ok:
