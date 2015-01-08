@@ -57,6 +57,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/ButtonWhite"
             android:text="@string/cancel" />
 
         <Button
@@ -64,6 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/ButtonGreen"
             android:enabled="false"
             android:text="@string/start" />
 
@@ -72,6 +74,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/ButtonRed"
             android:visibility="gone"
             android:text="@string/stop" />
 
@@ -80,6 +83,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/ButtonBlue"
             android:visibility="gone"
             android:text="@string/pause" />
 
@@ -88,6 +92,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/ButtonGreen"
             android:visibility="gone"
             android:text="@string/resume" />
 
@@ -96,6 +101,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/ButtonRed"
             android:visibility="gone"
             android:text="@string/redo" />
 
@@ -104,6 +110,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/ButtonGreen"
             android:visibility="gone"
             android:text="@string/ok" />
 

@@ -1,7 +1,26 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:buttonStyle">?android:attr/borderlessButtonStyle</item>
+    </style>
+
+    <style name="ButtonBlue" parent="ButtonColored">
+        <item name="android:background">@drawable/button_blue_background</item>
+    </style>
+
+    <style name="ButtonColored">
+        <item name="android:textColor">@color/button_colored_text</item>
+    </style>
+
+    <style name="ButtonGreen" parent="ButtonColored">
+        <item name="android:background">@drawable/button_green_background</item>
+    </style>
+
+    <style name="ButtonRed" parent="ButtonColored">
+        <item name="android:background">@drawable/button_red_background</item>
+    </style>
+
+    <style name="ButtonWhite">
+        <item name="android:background">@drawable/button_white_background</item>
     </style>
 
 </resources>

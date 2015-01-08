@@ -2,6 +2,17 @@
 <resources>
 
     <color name="cyan_100_transparent">#99B2EBF2</color>
+    <color name="gray_300">#E0E0E0</color>
+    <color name="gray_400">#BDBDBD</color>
+    <color name="green_500">#4CAF50</color>
+    <color name="green_700">#388E3C</color>
+    <color name="green_900">#1B5E20</color>
+    <color name="lightblue_500">#03A9F4</color>
+    <color name="lightblue_700">#0288D1</color>
     <color name="lightblue_900">#01579B</color>
+    <color name="red_500">#F44336</color>
+    <color name="red_700">#D32F2F</color>
+    <color name="red_900">#B71C1C</color>
+    <color name="white">#FFFFFF</color>
 
 </resources>
