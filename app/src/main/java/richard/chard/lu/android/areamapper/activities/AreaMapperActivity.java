@@ -213,6 +213,10 @@ public class AreaMapperActivity extends ActionBarActivity
 
         textViewArea = (TextView) findViewById(R.id.textview_area);
 
+        textViewArea.setText(
+                getString(R.string.area_format, 0d)
+        );
+
         mapView = (MapView) findViewById(R.id.mapview);
 
         googleApiClient = new GoogleApiClient.Builder(getApplicationContext())

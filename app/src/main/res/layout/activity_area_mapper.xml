@@ -13,8 +13,10 @@
 
         <TextView
             android:id="@+id/textview_area"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:layout_gravity="center_horizontal"
             android:text="@string/area_format" />
 
         <com.google.android.gms.maps.MapView
@@ -85,7 +87,7 @@
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@android:style/Widget.ProgressBar.Large" />
+            style="?android:attr/progressBarStyleLarge" />
 
     </LinearLayout>
 
