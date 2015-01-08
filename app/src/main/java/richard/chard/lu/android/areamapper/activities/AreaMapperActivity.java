@@ -33,15 +33,11 @@ public class AreaMapperActivity extends ActionBarActivity
 
     private static final Logger LOG = Logger.create(AreaMapperActivity.class);
 
-    public static final String EXTRA_KEY_MODE = "area_mapper_mode";
-
     private static final double LOCATION_MIN_ACCURACY = 35;
 
     private static final float MAP_INITIAL_ZOOM_LEVEL = 16;
 
     private static final long MAPVIEW_CHECK_DELAY = 200;
-
-    public static final int MODE_WALK = 0;
 
     private AreaCalculator areaCalculator = new AreaCalculator(this);
 
@@ -55,13 +51,6 @@ public class AreaMapperActivity extends ActionBarActivity
     private Location previousLocation;
 
     private TextView textViewArea;
-
-    private int getMode() {
-        return getIntent().getIntExtra(
-                EXTRA_KEY_MODE,
-                MODE_WALK
-        );
-    }
 
     @Override
     public void onBackPressed() {
@@ -81,6 +70,7 @@ public class AreaMapperActivity extends ActionBarActivity
         map.addPolygon(
                 areaCalculator.getPolygonOptions()
         );
+        // TODO: vary
         map.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
                         latLng,
@@ -295,17 +285,9 @@ public class AreaMapperActivity extends ActionBarActivity
 
         map = mapView.getMap();
 
-        switch (getMode()) {
-            case MODE_WALK:
-
-                map.getUiSettings().setAllGesturesEnabled(false);
-                map.getUiSettings().setZoomControlsEnabled(true);
-                map.setMyLocationEnabled(true);
-                break;
-
-            default:
-                throw new RuntimeException("Unknown mode: "+getMode());
-        }
+        map.getUiSettings().setAllGesturesEnabled(false);
+        map.getUiSettings().setZoomControlsEnabled(true);
+        map.setMyLocationEnabled(true);
 
         LOG.trace("Exit");
     }

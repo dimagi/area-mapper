@@ -9,10 +9,9 @@ import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.R;
 import richard.chard.lu.android.areamapper.ResultCode;
 
-public class ModeSelectionActivity extends ActionBarActivity
-    implements View.OnClickListener {
+public class BaseActivity extends ActionBarActivity {
 
-    private static final Logger LOG = Logger.create(ModeSelectionActivity.class);
+    private static final Logger LOG = Logger.create(BaseActivity.class);
 
     private static final int REQUEST_CODE_AREA = 0;
 
@@ -37,6 +36,8 @@ public class ModeSelectionActivity extends ActionBarActivity
                     break;
 
                 case ResultCode.REDO:
+
+                    startAreaMapperActivity();
                     break;
 
                 default:
@@ -48,47 +49,26 @@ public class ModeSelectionActivity extends ActionBarActivity
     }
 
     @Override
-    public void onClick(View view) {
-        LOG.trace("Entry");
-
-        switch (view.getId()) {
-            case R.id.button_cancel:
-
-                setResult(ResultCode.CANCEL);
-                finish();
-                break;
-
-            case R.id.button_walk:
-
-                startActivityForResult(
-                        new Intent(
-                                this,
-                                AreaMapperActivity.class
-                        ).putExtra(
-                                AreaMapperActivity.EXTRA_KEY_MODE,
-                                AreaMapperActivity.MODE_WALK
-                        ),
-                        REQUEST_CODE_AREA
-                );
-                break;
-
-            default:
-                throw new RuntimeException("Unknown view id: "+view.getId());
-        }
-
-        LOG.trace("Exit");
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         LOG.trace("Entry");
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_mode_selection);
+        startAreaMapperActivity();
 
-        findViewById(R.id.button_cancel).setOnClickListener(this);
-        findViewById(R.id.button_walk).setOnClickListener(this);
+        LOG.trace("Exit");
+    }
+
+    protected void startAreaMapperActivity() {
+        LOG.trace("Entry");
+
+        startActivityForResult(
+                new Intent(
+                        this,
+                        AreaMapperActivity.class
+                ),
+                REQUEST_CODE_AREA
+        );
 
         LOG.trace("Exit");
     }
