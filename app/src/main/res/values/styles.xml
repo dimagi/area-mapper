@@ -31,4 +31,8 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 
+    <style name="MapPanButton">
+        <item name="android:background">@drawable/button_white_background</item>
+    </style>
+
 </resources>

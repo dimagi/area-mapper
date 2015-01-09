@@ -38,7 +38,9 @@
                         <Button
                             android:id="@+id/button_map_pan_up"
                             android:layout_width="@dimen/map_pan_button_dimen"
-                            android:layout_height="@dimen/map_pan_button_dimen" />
+                            android:layout_height="@dimen/map_pan_button_dimen"
+                            style="@style/MapPanButton"
+                            android:text="&#8593;" />
 
                     </RelativeLayout>
 
@@ -50,13 +52,17 @@
                             android:id="@+id/button_map_pan_left"
                             android:layout_width="@dimen/map_pan_button_dimen"
                             android:layout_height="@dimen/map_pan_button_dimen"
-                            android:layout_alignParentLeft="true" />
+                            style="@style/MapPanButton"
+                            android:layout_alignParentLeft="true"
+                            android:text="&#8592;" />
 
                         <Button
                             android:id="@+id/button_map_pan_right"
                             android:layout_width="@dimen/map_pan_button_dimen"
                             android:layout_height="@dimen/map_pan_button_dimen"
-                            android:layout_alignParentRight="true" />
+                            style="@style/MapPanButton"
+                            android:layout_alignParentRight="true"
+                            android:text="&#8594;" />
 
                     </RelativeLayout>
 
@@ -68,7 +74,9 @@
                         <Button
                             android:id="@+id/button_map_pan_down"
                             android:layout_width="@dimen/map_pan_button_dimen"
-                            android:layout_height="@dimen/map_pan_button_dimen" />
+                            android:layout_height="@dimen/map_pan_button_dimen"
+                            style="@style/MapPanButton"
+                            android:text="&#8595;" />
 
                     </RelativeLayout>
 
