@@ -99,7 +99,7 @@ public class AreaMapperActivity extends ActionBarActivity
         Polygon polygon =  map.addPolygon(
                 polygonOptions
                         .strokeColor(R.color.lightblue_500)
-                        .fillColor(R.color.lightblue_100_transparent)
+                        .fillColor(R.color.lightblue_100_transparent_99)
         );
 
         LOG.trace("Exit");
@@ -230,7 +230,7 @@ public class AreaMapperActivity extends ActionBarActivity
                     public void run() {
                         ((HorizontalScrollView) findViewById(R.id.scrollview_result))
                                 .smoothScrollBy(
-                                        mapView.getWidth()/10,
+                                        mapView.getWidth() / 10,
                                         0
                                 );
                     }
