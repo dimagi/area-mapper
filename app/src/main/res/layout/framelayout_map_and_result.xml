@@ -27,6 +27,7 @@
                 <LinearLayout
                     android:layout_width="@dimen/map_pan_buttons_container_dimen"
                     android:layout_height="@dimen/map_pan_buttons_container_dimen"
+                    android:layout_margin="@dimen/map_pan_buttons_container_margin"
                     android:orientation="vertical" >
 
                     <RelativeLayout

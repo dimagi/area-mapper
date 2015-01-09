@@ -44,11 +44,11 @@ public class AreaMapperActivity extends ActionBarActivity
 
     private static final double LOCATION_MIN_ACCURACY = 35;
 
-    private static final int MAP_ANIMATE_DURATION_MS = 300;
+    private static final int MAP_ANIMATE_DURATION_MS = 150;
 
     private static final float MAP_INITIAL_ZOOM_LEVEL = 16;
 
-    private static final float MAP_SCROLL_PX = 100;
+    private static final float MAP_SCROLL_PX = 150;
 
     private AreaCalculator areaCalculator = new AreaCalculator(this);
 
