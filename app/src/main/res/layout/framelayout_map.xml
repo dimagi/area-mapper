@@ -13,11 +13,67 @@
             android:layout_height="match_parent"
             android:orientation="horizontal" >
 
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/mapview"
+            <FrameLayout
+                android:id="@+id/framelayout_map_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="invisible" />
+                android:layout_height="match_parent" >
+
+                <com.google.android.gms.maps.MapView
+                    android:id="@+id/mapview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible" />
+
+                <LinearLayout
+                    android:layout_width="@dimen/map_pan_buttons_container_dimen"
+                    android:layout_height="@dimen/map_pan_buttons_container_dimen"
+                    android:orientation="vertical" >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/map_pan_button_dimen"
+                        android:gravity="center" >
+
+                        <Button
+                            android:id="@+id/button_map_pan_up"
+                            android:layout_width="@dimen/map_pan_button_dimen"
+                            android:layout_height="@dimen/map_pan_button_dimen" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/map_pan_button_dimen" >
+
+                        <Button
+                            android:id="@+id/button_map_pan_left"
+                            android:layout_width="@dimen/map_pan_button_dimen"
+                            android:layout_height="@dimen/map_pan_button_dimen"
+                            android:layout_alignParentLeft="true" />
+
+                        <Button
+                            android:id="@+id/button_map_pan_right"
+                            android:layout_width="@dimen/map_pan_button_dimen"
+                            android:layout_height="@dimen/map_pan_button_dimen"
+                            android:layout_alignParentRight="true" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/map_pan_button_dimen"
+                        android:gravity="center" >
+
+                        <Button
+                            android:id="@+id/button_map_pan_down"
+                            android:layout_width="@dimen/map_pan_button_dimen"
+                            android:layout_height="@dimen/map_pan_button_dimen" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </FrameLayout>
 
             <ListView
                 android:id="@+id/listview_coordinates"

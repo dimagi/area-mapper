@@ -229,8 +229,10 @@ public class AreaMapperActivity extends ActionBarActivity
                         )
                 );
 
-                mapView.getLayoutParams().width = mapView.getWidth();
-                listViewCoordinates.getLayoutParams().width = mapView.getWidth();
+                View frameLayoutMapContainer = findViewById(R.id.framelayout_map_container);
+
+                frameLayoutMapContainer.getLayoutParams().width = frameLayoutMapContainer.getWidth();
+                listViewCoordinates.getLayoutParams().width = frameLayoutMapContainer.getWidth();
 
                 listViewCoordinates.setVisibility(View.VISIBLE);
                 listViewCoordinates.post(new Runnable() {

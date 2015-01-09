@@ -1,5 +1,7 @@
 <resources>
 
-    <dimen name="button_min_width">120dp</dimen>
+    <dimen name="action_button_min_width">120dp</dimen>
+    <dimen name="map_pan_button_dimen">32dp</dimen>
+    <dimen name="map_pan_buttons_container_dimen">96dp</dimen>
 
 </resources>

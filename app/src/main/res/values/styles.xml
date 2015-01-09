@@ -4,7 +4,7 @@
     </style>
 
     <style name="Button">
-        <item name="android:minWidth">@dimen/button_min_width</item>
+        <item name="android:minWidth">@dimen/action_button_min_width</item>
     </style>
 
     <style name="ButtonBlue" parent="ButtonColored">
