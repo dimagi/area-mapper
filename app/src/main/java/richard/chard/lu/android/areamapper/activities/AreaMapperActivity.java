@@ -1,7 +1,11 @@
 package richard.chard.lu.android.areamapper.activities;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -240,10 +244,36 @@ public class AreaMapperActivity extends ActionBarActivity
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     protected void onCreate(Bundle savedInstanceState) {
         LOG.trace("Entry");
 
         super.onCreate(savedInstanceState);
+
+        final int ORIENTATION = getResources().getConfiguration().orientation;
+
+        final int PORTRAIT = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ?
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT :
+                ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT;
+
+        final int LANDSCAPE = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ?
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE :
+                ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE;
+
+        switch (ORIENTATION) {
+            case Configuration.ORIENTATION_PORTRAIT:
+
+                setRequestedOrientation(PORTRAIT);
+                break;
+
+            case Configuration.ORIENTATION_LANDSCAPE:
+
+                setRequestedOrientation(LANDSCAPE);
+                break;
+
+            default:
+                throw new RuntimeException("Unknown orientation: "+ORIENTATION);
+        }
 
         setContentView(R.layout.activity_area_mapper);
 
