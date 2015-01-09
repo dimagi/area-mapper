@@ -44,7 +44,11 @@ public class AreaMapperActivity extends ActionBarActivity
 
     private static final double LOCATION_MIN_ACCURACY = 35;
 
+    private static final int MAP_ANIMATE_DURATION_MS = 300;
+
     private static final float MAP_INITIAL_ZOOM_LEVEL = 16;
+
+    private static final float MAP_SCROLL_PX = 100;
 
     private AreaCalculator areaCalculator = new AreaCalculator(this);
 
@@ -119,6 +123,11 @@ public class AreaMapperActivity extends ActionBarActivity
 
         setContentView(R.layout.activity_area_mapper);
 
+        findViewById(R.id.button_map_pan_left).setOnClickListener(this);
+        findViewById(R.id.button_map_pan_up).setOnClickListener(this);
+        findViewById(R.id.button_map_pan_right).setOnClickListener(this);
+        findViewById(R.id.button_map_pan_down).setOnClickListener(this);
+
         findViewById(R.id.button_cancel).setOnClickListener(this);
         findViewById(R.id.button_start).setOnClickListener(this);
         findViewById(R.id.button_pause).setOnClickListener(this);
@@ -181,6 +190,38 @@ public class AreaMapperActivity extends ActionBarActivity
         LOG.trace("Entry");
 
         switch (view.getId()) {
+            case R.id.button_map_pan_left:
+
+                panMap(
+                        -MAP_SCROLL_PX,
+                        0
+                );
+                break;
+
+            case R.id.button_map_pan_up:
+
+                panMap(
+                        0,
+                        -MAP_SCROLL_PX
+                );
+                break;
+
+            case R.id.button_map_pan_right:
+
+                panMap(
+                        MAP_SCROLL_PX,
+                        0
+                );
+                break;
+
+            case R.id.button_map_pan_down:
+
+                panMap(
+                        0,
+                        MAP_SCROLL_PX
+                );
+                break;
+
             case R.id.button_cancel:
 
                 setResult(ResultCode.CANCEL);
@@ -466,6 +507,16 @@ public class AreaMapperActivity extends ActionBarActivity
         super.onStop();
 
         LOG.trace("Exit");
+    }
+
+    private void panMap(float dx, float dy) {
+
+        map.animateCamera(
+                CameraUpdateFactory.scrollBy(dx, dy),
+                MAP_ANIMATE_DURATION_MS,
+                null
+        );
+
     }
 
     private void updateProgressState() {
