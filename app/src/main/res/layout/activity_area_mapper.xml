@@ -105,7 +105,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            style="@style/ButtonBlue"
+            style="@style/ButtonOrange"
             android:visibility="gone"
             android:text="@string/pause" />
 
@@ -123,7 +123,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            style="@style/ButtonRed"
+            style="@style/ButtonOrange"
             android:visibility="gone"
             android:text="@string/redo" />
 

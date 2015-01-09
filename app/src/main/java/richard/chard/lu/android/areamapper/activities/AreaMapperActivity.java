@@ -85,6 +85,8 @@ public class AreaMapperActivity extends ActionBarActivity
             map.clear();
             map.addPolygon(
                     areaCalculator.getPolygonOptions()
+                            .strokeColor(R.color.lightblue_500)
+                            .fillColor(R.color.lightblue_100_transparent)
             );
             map.moveCamera(
                     CameraUpdateFactory.newLatLng(latLng)
