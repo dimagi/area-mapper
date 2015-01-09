@@ -18,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 
 import richard.chard.lu.android.areamapper.AreaCalculator;
@@ -31,15 +32,13 @@ import richard.chard.lu.android.areamapper.ResultCode;
 public class AreaMapperActivity extends ActionBarActivity
         implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, AreaCalculator.Listener,
-        LocationListener {
+        LocationListener, OnMapReadyCallback {
 
     private static final Logger LOG = Logger.create(AreaMapperActivity.class);
 
     private static final double LOCATION_MIN_ACCURACY = 35;
 
     private static final float MAP_INITIAL_ZOOM_LEVEL = 16;
-
-    private static final long MAPVIEW_CHECK_DELAY = 200;
 
     private AreaCalculator areaCalculator = new AreaCalculator(this);
 
@@ -264,20 +263,7 @@ public class AreaMapperActivity extends ActionBarActivity
 
         mapView = (MapView) findViewById(R.id.mapview);
 
-        mapView.post(new Runnable() {
-
-            @Override
-            public void run() {
-                if (mapView.getMap() != null) {
-                    onMapAvailable();
-                } else {
-                    mapView.postDelayed(
-                            this,
-                            MAPVIEW_CHECK_DELAY);
-                }
-            }
-
-        });
+        mapView.getMapAsync(this);
 
         googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                 .addApi(LocationServices.API)
@@ -341,12 +327,13 @@ public class AreaMapperActivity extends ActionBarActivity
         LOG.trace("Exit");
     }
 
-    protected void onMapAvailable() {
+    @Override
+    public void onMapReady(GoogleMap map) {
         LOG.trace("Entry");
 
         MapsInitializer.initialize(getApplicationContext());
 
-        map = mapView.getMap();
+        this.map = map;
 
         map.getUiSettings().setAllGesturesEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(true);
