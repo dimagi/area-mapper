@@ -291,7 +291,7 @@ public class AreaMapperActivity extends ActionBarActivity
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         LOG.trace("Entry");
 
         mapView.onDestroy();
@@ -358,7 +358,7 @@ public class AreaMapperActivity extends ActionBarActivity
     }
 
     @Override
-    public void onPause() {
+    protected void onPause() {
         LOG.trace("Entry");
 
         if (googleApiClient.isConnected()) {
@@ -366,7 +366,6 @@ public class AreaMapperActivity extends ActionBarActivity
                     googleApiClient,
                     this
             );
-            googleApiClient.disconnect();
         }
 
         mapView.onPause();
@@ -377,27 +376,45 @@ public class AreaMapperActivity extends ActionBarActivity
     }
 
     @Override
-    public void onResume() {
+    protected void onResume() {
         LOG.trace("Entry");
 
         super.onResume();
 
         mapView.onResume();
 
-        if (!googleApiClient.isConnected()) {
-            googleApiClient.connect();
-        }
-
         LOG.trace("Exit");
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         LOG.trace("Entry");
 
         super.onSaveInstanceState(outState);
 
         mapView.onSaveInstanceState(outState);
+
+        LOG.trace("Exit");
+    }
+
+    @Override
+    protected void onStart() {
+        LOG.trace("Entry");
+
+        super.onStart();
+
+        googleApiClient.connect();
+
+        LOG.trace("Exit");
+    }
+
+    @Override
+    protected void onStop() {
+        LOG.trace("Entry");
+
+        googleApiClient.disconnect();
+
+        super.onStop();
 
         LOG.trace("Exit");
     }
