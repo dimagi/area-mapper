@@ -3,11 +3,15 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 
+    <style name="Button">
+        <item name="android:minWidth">@dimen/button_min_width</item>
+    </style>
+
     <style name="ButtonBlue" parent="ButtonColored">
         <item name="android:background">@drawable/button_blue_background</item>
     </style>
 
-    <style name="ButtonColored">
+    <style name="ButtonColored" parent="Button">
         <item name="android:textColor">@color/button_colored_text</item>
     </style>
 
@@ -23,7 +27,7 @@
         <item name="android:background">@drawable/button_red_background</item>
     </style>
 
-    <style name="ButtonWhite">
+    <style name="ButtonWhite" parent="Button">
         <item name="android:background">@drawable/button_white_background</item>
     </style>
 

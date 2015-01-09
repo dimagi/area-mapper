@@ -1,0 +1,5 @@
+<resources>
+
+    <dimen name="button_min_width">120dp</dimen>
+
+</resources>
