@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.ArrayAdapter;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.maps.android.SphericalUtil;
 
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 public class AreaCalculator {
 
     public interface Listener {
+
+        public Polygon getPolygon(PolygonOptions polygonOptions);
 
         public void onAreaChange(LatLng latLng, double areaSqMeters);
 
@@ -30,6 +33,8 @@ public class AreaCalculator {
 
     private Listener listener;
 
+    private Polygon polygon;
+
     public void addLatLng(LatLng latLng) {
         LOG.trace("Entry");
 
@@ -43,6 +48,15 @@ public class AreaCalculator {
         );
 
         listener.onAreaChange(latLng, getArea());
+
+        if (polygon == null) {
+            polygon = listener.getPolygon(
+                    new PolygonOptions()
+                            .addAll(boundingLatLngs)
+            );
+        } else {
+            polygon.setPoints(boundingLatLngs);
+        }
 
         LOG.trace("Exit");
     }
@@ -61,11 +75,6 @@ public class AreaCalculator {
         } else {
             return 0;
         }
-    }
-
-    public PolygonOptions getPolygonOptions() {
-        return new PolygonOptions()
-                .addAll(boundingLatLngs);
     }
 
 }

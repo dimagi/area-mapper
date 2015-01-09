@@ -24,6 +24,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 import richard.chard.lu.android.areamapper.AreaCalculator;
 import richard.chard.lu.android.areamapper.Logger;
@@ -90,6 +92,20 @@ public class AreaMapperActivity extends ActionBarActivity
         LOG.trace("Exit");
     }
 
+    @Override
+    public Polygon getPolygon(PolygonOptions polygonOptions) {
+        LOG.trace("Entry");
+
+        Polygon polygon =  map.addPolygon(
+                polygonOptions
+                        .strokeColor(R.color.lightblue_500)
+                        .fillColor(R.color.lightblue_100_transparent)
+        );
+
+        LOG.trace("Exit");
+        return polygon;
+    }
+
     private void initializeViews() {
         LOG.trace("Entry");
 
@@ -142,16 +158,6 @@ public class AreaMapperActivity extends ActionBarActivity
 
             updateProgressState();
         } else {
-
-            map.clear();
-            map.addPolygon(
-                    areaCalculator.getPolygonOptions()
-                            .strokeColor(R.color.lightblue_500)
-                            .fillColor(R.color.lightblue_100_transparent)
-            );
-            map.moveCamera(
-                    CameraUpdateFactory.newLatLng(latLng)
-            );
 
             textViewArea.setText(
                     getString(R.string.area_format, area)
