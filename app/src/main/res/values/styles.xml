@@ -1,34 +1,34 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    </style>
-
-    <style name="Button">
+    <style name="ActionButton">
         <item name="android:minWidth">@dimen/action_button_min_width</item>
     </style>
 
-    <style name="ButtonBlue" parent="ButtonColored">
+    <style name="ActionButtonBlue" parent="ActionButtonColored">
         <item name="android:background">@drawable/button_blue_background</item>
     </style>
 
-    <style name="ButtonColored" parent="Button">
+    <style name="ActionButtonColored" parent="ActionButton">
         <item name="android:textColor">@color/button_colored_text</item>
     </style>
 
-    <style name="ButtonGreen" parent="ButtonColored">
+    <style name="ActionButtonGreen" parent="ActionButtonColored">
         <item name="android:background">@drawable/button_green_background</item>
     </style>
 
-    <style name="ButtonOrange" parent="ButtonColored">
+    <style name="ActionButtonOrange" parent="ActionButtonColored">
         <item name="android:background">@drawable/button_orange_background</item>
     </style>
 
-    <style name="ButtonRed" parent="ButtonColored">
+    <style name="ActionButtonRed" parent="ActionButtonColored">
         <item name="android:background">@drawable/button_red_background</item>
     </style>
 
-    <style name="ButtonWhite" parent="Button">
+    <style name="ActionButtonWhite" parent="ActionButton">
         <item name="android:background">@drawable/button_white_background</item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 
 </resources>
