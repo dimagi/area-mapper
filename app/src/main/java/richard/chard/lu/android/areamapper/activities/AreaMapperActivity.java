@@ -58,6 +58,64 @@ public class AreaMapperActivity extends ActionBarActivity
 
     private TextView textViewArea;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private void freezeOrientation() {
+        LOG.trace("Entry");
+
+        final int ORIENTATION = getResources().getConfiguration().orientation;
+
+        final int PORTRAIT = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ?
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT :
+                ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT;
+
+        final int LANDSCAPE = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ?
+                ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE :
+                ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE;
+
+        switch (ORIENTATION) {
+            case Configuration.ORIENTATION_PORTRAIT:
+
+                setRequestedOrientation(PORTRAIT);
+                break;
+
+            case Configuration.ORIENTATION_LANDSCAPE:
+
+                setRequestedOrientation(LANDSCAPE);
+                break;
+
+            default:
+                throw new RuntimeException("Unknown orientation: "+ORIENTATION);
+        }
+
+        LOG.trace("Exit");
+    }
+
+    private void initializeViews() {
+        LOG.trace("Entry");
+
+        setContentView(R.layout.activity_area_mapper);
+
+        findViewById(R.id.button_cancel).setOnClickListener(this);
+        findViewById(R.id.button_start).setOnClickListener(this);
+        findViewById(R.id.button_pause).setOnClickListener(this);
+        findViewById(R.id.button_resume).setOnClickListener(this);
+        findViewById(R.id.button_stop).setOnClickListener(this);
+        findViewById(R.id.button_redo).setOnClickListener(this);
+        findViewById(R.id.button_ok).setOnClickListener(this);
+
+        textViewArea = (TextView) findViewById(R.id.textview_area);
+
+        textViewArea.setText(
+                getString(R.string.area_format, 0d)
+        );
+
+        mapView = (MapView) findViewById(R.id.mapview);
+
+        mapView.getMapAsync(this);
+
+        LOG.trace("Exit");
+    }
+
     @Override
     public void onBackPressed() {
         LOG.trace("Entry");
@@ -244,56 +302,14 @@ public class AreaMapperActivity extends ActionBarActivity
     }
 
     @Override
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     protected void onCreate(Bundle savedInstanceState) {
         LOG.trace("Entry");
 
         super.onCreate(savedInstanceState);
 
-        final int ORIENTATION = getResources().getConfiguration().orientation;
+        freezeOrientation();
 
-        final int PORTRAIT = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ?
-                ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT :
-                ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT;
-
-        final int LANDSCAPE = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ?
-                ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE :
-                ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE;
-
-        switch (ORIENTATION) {
-            case Configuration.ORIENTATION_PORTRAIT:
-
-                setRequestedOrientation(PORTRAIT);
-                break;
-
-            case Configuration.ORIENTATION_LANDSCAPE:
-
-                setRequestedOrientation(LANDSCAPE);
-                break;
-
-            default:
-                throw new RuntimeException("Unknown orientation: "+ORIENTATION);
-        }
-
-        setContentView(R.layout.activity_area_mapper);
-
-        findViewById(R.id.button_cancel).setOnClickListener(this);
-        findViewById(R.id.button_start).setOnClickListener(this);
-        findViewById(R.id.button_pause).setOnClickListener(this);
-        findViewById(R.id.button_resume).setOnClickListener(this);
-        findViewById(R.id.button_stop).setOnClickListener(this);
-        findViewById(R.id.button_redo).setOnClickListener(this);
-        findViewById(R.id.button_ok).setOnClickListener(this);
-
-        textViewArea = (TextView) findViewById(R.id.textview_area);
-
-        textViewArea.setText(
-                getString(R.string.area_format, 0d)
-        );
-
-        mapView = (MapView) findViewById(R.id.mapview);
-
-        mapView.getMapAsync(this);
+        initializeViews();
 
         googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                 .addApi(LocationServices.API)
