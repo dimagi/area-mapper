@@ -84,7 +84,7 @@
         </LinearLayout>
 
         <include
-            layout="@layout/framelayout_map"
+            layout="@layout/framelayout_map_and_result"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

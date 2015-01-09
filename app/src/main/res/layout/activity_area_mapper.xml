@@ -9,7 +9,7 @@
         layout="@layout/textview_area" />
 
     <include
-        layout="@layout/framelayout_map"
+        layout="@layout/framelayout_map_and_result"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
