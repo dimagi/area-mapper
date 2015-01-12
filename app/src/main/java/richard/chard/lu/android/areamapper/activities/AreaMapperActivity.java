@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -38,11 +39,13 @@ import richard.chard.lu.android.areamapper.ResultCode;
 public class AreaMapperActivity extends ActionBarActivity
         implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, AreaCalculator.Listener,
-        LocationListener, OnMapReadyCallback {
+        LocationListener, OnMapReadyCallback, SeekBar.OnSeekBarChangeListener {
 
     private static final Logger LOG = Logger.create(AreaMapperActivity.class);
 
-    private static final double LOCATION_MIN_ACCURACY = 35;
+    private static int LOCATION_MIN_ACCURACY = 35;
+    private static final int LOCATION_MIN_MAX_ACCURACY = 50;
+    private static final int LOCATION_MIN_MIN_ACCURACY = 10;
 
     private static final int MAP_ANIMATE_DURATION_MS = 150;
 
@@ -63,6 +66,7 @@ public class AreaMapperActivity extends ActionBarActivity
     private Location previousLocation;
 
     private TextView textViewArea;
+    private TextView textViewLocationAccuracy;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void freezeOrientation() {
@@ -145,6 +149,19 @@ public class AreaMapperActivity extends ActionBarActivity
         mapView = (MapView) findViewById(R.id.mapview);
 
         mapView.getMapAsync(this);
+
+        SeekBar seekBarLocationAccuracy = (SeekBar) findViewById(R.id.seekbar_location_accuracy);
+        seekBarLocationAccuracy.setMax(LOCATION_MIN_MAX_ACCURACY - LOCATION_MIN_MIN_ACCURACY);
+        seekBarLocationAccuracy.setProgress(LOCATION_MIN_ACCURACY - LOCATION_MIN_MIN_ACCURACY);
+        seekBarLocationAccuracy.setOnSeekBarChangeListener(this);
+
+        textViewLocationAccuracy = (TextView) findViewById(R.id.textview_location_accuracy);
+        textViewLocationAccuracy.setText(
+                getString(
+                        R.string.location_accuracy_format,
+                        LOCATION_MIN_ACCURACY
+                )
+        );
 
         LOG.trace("Exit");
     }
@@ -466,6 +483,19 @@ public class AreaMapperActivity extends ActionBarActivity
     }
 
     @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+        LOCATION_MIN_ACCURACY = LOCATION_MIN_MIN_ACCURACY + progress;
+        textViewLocationAccuracy.setText(
+                getString(
+                        R.string.location_accuracy_format,
+                        LOCATION_MIN_ACCURACY
+                )
+        );
+
+    }
+
+    @Override
     protected void onResume() {
         LOG.trace("Entry");
 
@@ -499,12 +529,26 @@ public class AreaMapperActivity extends ActionBarActivity
     }
 
     @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        LOG.trace("Entry");
+
+        LOG.trace("Exit");
+    }
+
+    @Override
     protected void onStop() {
         LOG.trace("Entry");
 
         googleApiClient.disconnect();
 
         super.onStop();
+
+        LOG.trace("Exit");
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        LOG.trace("Entry");
 
         LOG.trace("Exit");
     }
@@ -542,5 +586,4 @@ public class AreaMapperActivity extends ActionBarActivity
 
         LOG.trace("Exit");
     }
-
 }
