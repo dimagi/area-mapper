@@ -121,6 +121,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp"
+        android:visibility="invisible"
         android:alpha="0"
         android:background="@color/white_transparent_cc" >
 

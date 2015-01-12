@@ -188,6 +188,12 @@ public class AreaMapperActivity extends ActionBarActivity
         linearLayoutSettings.setAlpha(value);
         buttonSettings.setRotation(value * 180);
 
+        if (value > 0) {
+            linearLayoutSettings.setVisibility(View.VISIBLE);
+        } else {
+            linearLayoutSettings.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     @Override
