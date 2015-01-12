@@ -35,6 +35,7 @@ import richard.chard.lu.android.areamapper.AreaCalculator;
 import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.R;
 import richard.chard.lu.android.areamapper.ResultCode;
+import richard.chard.lu.android.areamapper.StopPropagationTouchListener;
 
 /**
  * @author Richard Lu
@@ -137,6 +138,9 @@ public class AreaMapperActivity extends ActionBarActivity
 
         setContentView(R.layout.activity_area_mapper);
 
+        findViewById(R.id.linearlayout_progressbar).setOnTouchListener(
+                StopPropagationTouchListener.getInstance());
+
         findViewById(R.id.button_map_pan_left).setOnClickListener(this);
         findViewById(R.id.button_map_pan_up).setOnClickListener(this);
         findViewById(R.id.button_map_pan_right).setOnClickListener(this);
@@ -164,6 +168,7 @@ public class AreaMapperActivity extends ActionBarActivity
         buttonSettings.setOnClickListener(this);
 
         linearLayoutSettings = (LinearLayout) findViewById(R.id.linearlayout_settings);
+        linearLayoutSettings.setOnTouchListener(StopPropagationTouchListener.getInstance());
 
         SeekBar seekBarLocationAccuracy = (SeekBar) findViewById(R.id.seekbar_location_accuracy);
         seekBarLocationAccuracy.setMax(LOCATION_MIN_MAX_ACCURACY - LOCATION_MIN_MIN_ACCURACY);
