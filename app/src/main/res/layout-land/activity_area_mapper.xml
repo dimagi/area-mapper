@@ -6,7 +6,7 @@
     tools:context="richard.chard.lu.android.areamapper.activities.AreaMapperActivity">
 
     <include
-        layout="@layout/textview_area" />
+        layout="@layout/relativelayout_area_and_settings" />
 
     <LinearLayout
         android:layout_width="match_parent"

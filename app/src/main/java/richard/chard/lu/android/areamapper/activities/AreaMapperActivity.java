@@ -1,5 +1,6 @@
 package richard.chard.lu.android.areamapper.activities;
 
+import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -10,6 +11,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -39,26 +42,33 @@ import richard.chard.lu.android.areamapper.ResultCode;
 public class AreaMapperActivity extends ActionBarActivity
         implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, AreaCalculator.Listener,
-        LocationListener, OnMapReadyCallback, SeekBar.OnSeekBarChangeListener {
+        LocationListener, OnMapReadyCallback, SeekBar.OnSeekBarChangeListener,
+        ValueAnimator.AnimatorUpdateListener {
 
     private static final Logger LOG = Logger.create(AreaMapperActivity.class);
+
+    private static final int ANIMATION_DURATION_MS = 150;
 
     private static int LOCATION_MIN_ACCURACY = 35;
     private static final int LOCATION_MIN_MAX_ACCURACY = 50;
     private static final int LOCATION_MIN_MIN_ACCURACY = 10;
 
-    private static final int MAP_ANIMATE_DURATION_MS = 150;
-
     private static final float MAP_INITIAL_ZOOM_LEVEL = 16;
 
     private static final float MAP_SCROLL_PX = 150;
 
+    private ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+
     private AreaCalculator areaCalculator = new AreaCalculator(this);
+
+    private ImageButton buttonSettings;
 
     private GoogleApiClient googleApiClient;
 
     private boolean isCameraInitiallyPositioned;
     private boolean isRecording;
+
+    private LinearLayout linearLayoutSettings;
 
     private GoogleMap map;
     private MapView mapView;
@@ -150,6 +160,11 @@ public class AreaMapperActivity extends ActionBarActivity
 
         mapView.getMapAsync(this);
 
+        buttonSettings = (ImageButton) findViewById(R.id.button_settings);
+        buttonSettings.setOnClickListener(this);
+
+        linearLayoutSettings = (LinearLayout) findViewById(R.id.linearlayout_settings);
+
         SeekBar seekBarLocationAccuracy = (SeekBar) findViewById(R.id.seekbar_location_accuracy);
         seekBarLocationAccuracy.setMax(LOCATION_MIN_MAX_ACCURACY - LOCATION_MIN_MIN_ACCURACY);
         seekBarLocationAccuracy.setProgress(LOCATION_MIN_ACCURACY - LOCATION_MIN_MIN_ACCURACY);
@@ -164,6 +179,15 @@ public class AreaMapperActivity extends ActionBarActivity
         );
 
         LOG.trace("Exit");
+    }
+
+    @Override
+    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+        float value = (float) valueAnimator.getAnimatedValue();
+        linearLayoutSettings.setAlpha(value);
+        buttonSettings.setRotation(value * 180);
+
     }
 
     @Override
@@ -329,6 +353,17 @@ public class AreaMapperActivity extends ActionBarActivity
                 finish();
                 break;
 
+            case R.id.button_settings:
+
+                if (!animator.isRunning()) {
+                    if (linearLayoutSettings.getAlpha() == 0) {
+                        animator.start();
+                    } else {
+                        animator.reverse();
+                    }
+                }
+                break;
+
             default:
                 throw new RuntimeException("Unknown view id: "+view.getId());
         }
@@ -382,6 +417,9 @@ public class AreaMapperActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
 
         freezeOrientation();
+
+        animator.setDuration(ANIMATION_DURATION_MS);
+        animator.addUpdateListener(this);
 
         initializeViews();
 
@@ -557,7 +595,7 @@ public class AreaMapperActivity extends ActionBarActivity
 
         map.animateCamera(
                 CameraUpdateFactory.scrollBy(dx, dy),
-                MAP_ANIMATE_DURATION_MS,
+                ANIMATION_DURATION_MS,
                 null
         );
 
