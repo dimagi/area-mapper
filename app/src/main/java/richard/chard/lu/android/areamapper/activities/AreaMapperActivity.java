@@ -58,6 +58,9 @@ public class AreaMapperActivity extends ActionBarActivity
 
     private static final float MAP_SCROLL_PX = 150;
 
+    public static final String EXTRA_KEY_RESPONSE_AREA = "area";
+    public static final String EXTRA_KEY_RESPONSE_BUNDLE = "odk_intent_bundle";
+
     private ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
 
     private AreaCalculator areaCalculator = new AreaCalculator(this);
@@ -344,13 +347,13 @@ public class AreaMapperActivity extends ActionBarActivity
 
                 Bundle result = new Bundle();
                 result.putDouble(
-                        "area",
+                        EXTRA_KEY_RESPONSE_AREA,
                         areaCalculator.getArea()
                 );
 
                 Intent data = new Intent();
                 data.putExtra(
-                        "odk_intent_bundle",
+                        EXTRA_KEY_RESPONSE_BUNDLE,
                         result
                 );
 
