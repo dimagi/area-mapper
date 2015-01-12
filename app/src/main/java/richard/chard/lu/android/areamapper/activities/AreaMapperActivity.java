@@ -346,9 +346,9 @@ public class AreaMapperActivity extends ActionBarActivity
             case R.id.button_ok:
 
                 Bundle result = new Bundle();
-                result.putDouble(
+                result.putString(
                         EXTRA_KEY_RESPONSE_AREA,
-                        areaCalculator.getArea()
+                        Double.toString(areaCalculator.getArea())
                 );
 
                 Intent data = new Intent();
