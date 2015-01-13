@@ -27,43 +27,35 @@
                 <RelativeLayout
                     android:layout_width="@dimen/map_pan_buttons_container_dimen"
                     android:layout_height="@dimen/map_pan_buttons_container_dimen"
-                    android:layout_margin="@dimen/map_pan_buttons_container_margin" >
+                    android:layout_margin="@dimen/map_pan_buttons_container_margin"
+                    android:background="@drawable/map_pan_buttons_container_background" >
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/button_map_pan_up"
-                        android:layout_width="@dimen/map_pan_button_dimen"
-                        android:layout_height="@dimen/map_pan_button_dimen"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
-                        style="@style/MapPanButton"
-                        android:text="&#8593;" />
+                        android:rotation="90"
+                        style="@style/MapPanButton" />
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/button_map_pan_left"
-                        android:layout_width="@dimen/map_pan_button_dimen"
-                        android:layout_height="@dimen/map_pan_button_dimen"
-                        style="@style/MapPanButton"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:text="&#8592;" />
+                        style="@style/MapPanButton" />
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/button_map_pan_right"
-                        android:layout_width="@dimen/map_pan_button_dimen"
-                        android:layout_height="@dimen/map_pan_button_dimen"
-                        style="@style/MapPanButton"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:text="&#8594;" />
+                        android:rotation="180"
+                        style="@style/MapPanButton" />
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/button_map_pan_down"
-                        android:layout_width="@dimen/map_pan_button_dimen"
-                        android:layout_height="@dimen/map_pan_button_dimen"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
-                        style="@style/MapPanButton"
-                        android:text="&#8595;" />
+                        android:rotation="270"
+                        style="@style/MapPanButton" />
 
                 </RelativeLayout>
 
