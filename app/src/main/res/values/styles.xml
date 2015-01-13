@@ -35,7 +35,7 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:layout_width">@dimen/map_pan_button_dimen</item>
         <item name="android:layout_height">@dimen/map_pan_button_dimen</item>
-        <item name="android:src">@drawable/android_18_ic_ab_back_holo_light</item>
+        <item name="android:src">@drawable/map_pan_button_arrow</item>
         <item name="android:scaleType">fitXY</item>
     </style>
 
