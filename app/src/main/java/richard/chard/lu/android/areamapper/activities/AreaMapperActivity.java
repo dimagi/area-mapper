@@ -469,7 +469,8 @@ public class AreaMapperActivity extends ActionBarActivity
             boolean addLocation = previousLocation == null ||
                     (
                             isRecording &&
-                            location.distanceTo(previousLocation) > previousLocation.getAccuracy()
+                            location.distanceTo(previousLocation) >=
+                                    location.getAccuracy() + previousLocation.getAccuracy()
                     );
 
             if (addLocation) {
