@@ -24,63 +24,48 @@
                     android:layout_height="match_parent"
                     android:visibility="invisible" />
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="@dimen/map_pan_buttons_container_dimen"
                     android:layout_height="@dimen/map_pan_buttons_container_dimen"
-                    android:layout_margin="@dimen/map_pan_buttons_container_margin"
-                    android:orientation="vertical" >
+                    android:layout_margin="@dimen/map_pan_buttons_container_margin" >
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
+                    <Button
+                        android:id="@+id/button_map_pan_up"
+                        android:layout_width="@dimen/map_pan_button_dimen"
                         android:layout_height="@dimen/map_pan_button_dimen"
-                        android:gravity="center" >
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        style="@style/MapPanButton"
+                        android:text="&#8593;" />
 
-                        <Button
-                            android:id="@+id/button_map_pan_up"
-                            android:layout_width="@dimen/map_pan_button_dimen"
-                            android:layout_height="@dimen/map_pan_button_dimen"
-                            style="@style/MapPanButton"
-                            android:text="&#8593;" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/map_pan_button_dimen" >
-
-                        <Button
-                            android:id="@+id/button_map_pan_left"
-                            android:layout_width="@dimen/map_pan_button_dimen"
-                            android:layout_height="@dimen/map_pan_button_dimen"
-                            style="@style/MapPanButton"
-                            android:layout_alignParentLeft="true"
-                            android:text="&#8592;" />
-
-                        <Button
-                            android:id="@+id/button_map_pan_right"
-                            android:layout_width="@dimen/map_pan_button_dimen"
-                            android:layout_height="@dimen/map_pan_button_dimen"
-                            style="@style/MapPanButton"
-                            android:layout_alignParentRight="true"
-                            android:text="&#8594;" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
+                    <Button
+                        android:id="@+id/button_map_pan_left"
+                        android:layout_width="@dimen/map_pan_button_dimen"
                         android:layout_height="@dimen/map_pan_button_dimen"
-                        android:gravity="center" >
+                        style="@style/MapPanButton"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:text="&#8592;" />
 
-                        <Button
-                            android:id="@+id/button_map_pan_down"
-                            android:layout_width="@dimen/map_pan_button_dimen"
-                            android:layout_height="@dimen/map_pan_button_dimen"
-                            style="@style/MapPanButton"
-                            android:text="&#8595;" />
+                    <Button
+                        android:id="@+id/button_map_pan_right"
+                        android:layout_width="@dimen/map_pan_button_dimen"
+                        android:layout_height="@dimen/map_pan_button_dimen"
+                        style="@style/MapPanButton"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="&#8594;" />
 
-                    </RelativeLayout>
+                    <Button
+                        android:id="@+id/button_map_pan_down"
+                        android:layout_width="@dimen/map_pan_button_dimen"
+                        android:layout_height="@dimen/map_pan_button_dimen"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        style="@style/MapPanButton"
+                        android:text="&#8595;" />
 
-                </LinearLayout>
+                </RelativeLayout>
 
             </FrameLayout>
 
