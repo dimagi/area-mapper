@@ -72,19 +72,13 @@ public class BaseActivity extends ActionBarActivity {
     protected void startAreaMapperActivity() {
         LOG.trace("Entry");
 
-        Intent intent = new Intent(
-                this,
-                AreaMapperActivity.class
-        );
-
-        if (getIntent().getExtras() != null) {
-            intent.putExtras(
-                    getIntent().getExtras()
-            );
-        }
-
         startActivityForResult(
-                intent,
+                new Intent(
+                        this,
+                        AreaMapperActivity.class
+                ).putExtras(
+                        getIntent()
+                ),
                 REQUEST_CODE_AREA
         );
 
