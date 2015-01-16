@@ -50,7 +50,6 @@ public class AreaMapperActivity extends ActionBarActivity
 
     private static final int ANIMATION_DURATION_MS = 150;
 
-    private static int LOCATION_MIN_ACCURACY = 35;
     private static final int LOCATION_MIN_MAX_ACCURACY = 50;
     private static final int LOCATION_MIN_MIN_ACCURACY = 10;
 
@@ -58,6 +57,9 @@ public class AreaMapperActivity extends ActionBarActivity
 
     private static final float MAP_SCROLL_PX = 150;
 
+    public static final String EXTRA_KEY_PARAM_ACCURACY = "accuracy";
+    public static final String EXTRA_KEY_PARAM_INTERVAL_METERS = "interval_meters";
+    public static final String EXTRA_KEY_PARAM_INTERVAL_MILLIS = "interval_millis";
     public static final String EXTRA_KEY_RESPONSE_AREA = "area";
     public static final String EXTRA_KEY_RESPONSE_BUNDLE = "odk_intent_bundle";
 
@@ -74,10 +76,15 @@ public class AreaMapperActivity extends ActionBarActivity
 
     private LinearLayout linearLayoutSettings;
 
+    private int locationMinAccuracy = 35;
+
     private GoogleMap map;
     private MapView mapView;
 
     private Location previousLocation;
+
+    private int recordingIntervalMeters = 0;
+    private int recordingIntervalMillis = 0;
 
     private TextView textViewArea;
     private TextView textViewLocationAccuracy;
@@ -136,6 +143,36 @@ public class AreaMapperActivity extends ActionBarActivity
         return polygon;
     }
 
+    private void initializeParameters() {
+        LOG.trace("Entry");
+
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+
+            if (extras.containsKey(EXTRA_KEY_PARAM_ACCURACY)) {
+                locationMinAccuracy = Math.max(
+                        LOCATION_MIN_MIN_ACCURACY,
+                        Math.min(
+                                LOCATION_MIN_MAX_ACCURACY,
+                                Integer.valueOf(extras.getString(EXTRA_KEY_PARAM_ACCURACY))
+                        )
+                );
+            }
+            if (extras.containsKey(EXTRA_KEY_PARAM_INTERVAL_METERS)) {
+                recordingIntervalMeters =
+                        Integer.valueOf(extras.getString(EXTRA_KEY_PARAM_INTERVAL_METERS));
+            }
+            if (extras.containsKey(EXTRA_KEY_PARAM_INTERVAL_MILLIS)) {
+                recordingIntervalMillis =
+                        Integer.valueOf(extras.getString(EXTRA_KEY_PARAM_INTERVAL_MILLIS));
+            }
+
+        }
+
+        LOG.trace("Exit");
+    }
+
     private void initializeViews() {
         LOG.trace("Entry");
 
@@ -175,14 +212,14 @@ public class AreaMapperActivity extends ActionBarActivity
 
         SeekBar seekBarLocationAccuracy = (SeekBar) findViewById(R.id.seekbar_location_accuracy);
         seekBarLocationAccuracy.setMax(LOCATION_MIN_MAX_ACCURACY - LOCATION_MIN_MIN_ACCURACY);
-        seekBarLocationAccuracy.setProgress(LOCATION_MIN_ACCURACY - LOCATION_MIN_MIN_ACCURACY);
+        seekBarLocationAccuracy.setProgress(locationMinAccuracy - LOCATION_MIN_MIN_ACCURACY);
         seekBarLocationAccuracy.setOnSeekBarChangeListener(this);
 
         textViewLocationAccuracy = (TextView) findViewById(R.id.textview_location_accuracy);
         textViewLocationAccuracy.setText(
                 getString(
                         R.string.location_accuracy_format,
-                        LOCATION_MIN_ACCURACY
+                        locationMinAccuracy
                 )
         );
 
@@ -428,6 +465,8 @@ public class AreaMapperActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         LOG.trace("Entry");
 
+        initializeParameters();
+
         super.onCreate(savedInstanceState);
 
         freezeOrientation();
@@ -463,7 +502,7 @@ public class AreaMapperActivity extends ActionBarActivity
     public void onLocationChanged(Location location) {
         LOG.trace("Entry");
 
-        if (location.getAccuracy() <= LOCATION_MIN_ACCURACY) {
+        if (location.getAccuracy() <= locationMinAccuracy) {
             LOG.debug("location.getAccuracy()={}", location.getAccuracy());
 
             boolean addLocation = previousLocation == null ||
@@ -471,6 +510,10 @@ public class AreaMapperActivity extends ActionBarActivity
                             isRecording &&
                             location.distanceTo(previousLocation) >=
                                     location.getAccuracy() + previousLocation.getAccuracy()
+                            && location.getTime() - previousLocation.getTime() >=
+                                    recordingIntervalMillis
+                            && location.distanceTo(previousLocation) >=
+                                    recordingIntervalMeters
                     );
 
             if (addLocation) {
@@ -538,11 +581,11 @@ public class AreaMapperActivity extends ActionBarActivity
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        LOCATION_MIN_ACCURACY = LOCATION_MIN_MIN_ACCURACY + progress;
+        locationMinAccuracy = LOCATION_MIN_MIN_ACCURACY + progress;
         textViewLocationAccuracy.setText(
                 getString(
                         R.string.location_accuracy_format,
-                        LOCATION_MIN_ACCURACY
+                        locationMinAccuracy
                 )
         );
 
