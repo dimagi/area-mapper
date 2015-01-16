@@ -57,13 +57,15 @@ public class AreaMapperActivity extends ActionBarActivity
 
     private static final float MAP_SCROLL_PX = 150;
 
-    public static final String EXTRA_KEY_PARAM_ACCURACY = "accuracy";
-    public static final String EXTRA_KEY_PARAM_INTERVAL_METERS = "interval_meters";
-    public static final String EXTRA_KEY_PARAM_INTERVAL_MILLIS = "interval_millis";
-    public static final String EXTRA_KEY_RESPONSE_AREA = "area";
+    public static final String EXTRA_KEY_ACCURACY = "accuracy";
+    public static final String EXTRA_KEY_AREA = "area";
+    public static final String EXTRA_KEY_COORDINATES = "coordinates";
+    public static final String EXTRA_KEY_IMAGE = "image";
+    public static final String EXTRA_KEY_INTERVAL_METERS = "interval_meters";
+    public static final String EXTRA_KEY_INTERVAL_MILLIS = "interval_millis";
     public static final String EXTRA_KEY_RESPONSE_BUNDLE = "odk_intent_bundle";
 
-    private ValueAnimator animator = ValueAnimator.ofFloat(0f, 1f);
+    private ValueAnimator settingsMenuAnimator = ValueAnimator.ofFloat(0f, 1f);
 
     private AreaCalculator areaCalculator = new AreaCalculator(this);
 
@@ -72,6 +74,10 @@ public class AreaMapperActivity extends ActionBarActivity
     private GoogleApiClient googleApiClient;
 
     private boolean isCameraInitiallyPositioned;
+
+    private boolean isCoordinatesReturnRequired;
+    private boolean isImageReturnRequired;
+
     private boolean isRecording;
 
     private LinearLayout linearLayoutSettings;
@@ -146,26 +152,34 @@ public class AreaMapperActivity extends ActionBarActivity
     private void initializeParameters() {
         LOG.trace("Entry");
 
-        Bundle extras = getIntent().getExtras();
+        Bundle params = getIntent().getExtras();
 
-        if (extras != null) {
+        if (params != null) {
 
-            if (extras.containsKey(EXTRA_KEY_PARAM_ACCURACY)) {
+            if (params.containsKey(EXTRA_KEY_ACCURACY)) {
                 locationMinAccuracy = Math.max(
                         LOCATION_MIN_MIN_ACCURACY,
                         Math.min(
                                 LOCATION_MIN_MAX_ACCURACY,
-                                Integer.valueOf(extras.getString(EXTRA_KEY_PARAM_ACCURACY))
+                                Integer.valueOf(params.getString(EXTRA_KEY_ACCURACY))
                         )
                 );
             }
-            if (extras.containsKey(EXTRA_KEY_PARAM_INTERVAL_METERS)) {
+            if (params.containsKey(EXTRA_KEY_INTERVAL_METERS)) {
                 recordingIntervalMeters =
-                        Integer.valueOf(extras.getString(EXTRA_KEY_PARAM_INTERVAL_METERS));
+                        Integer.valueOf(params.getString(EXTRA_KEY_INTERVAL_METERS));
             }
-            if (extras.containsKey(EXTRA_KEY_PARAM_INTERVAL_MILLIS)) {
+            if (params.containsKey(EXTRA_KEY_INTERVAL_MILLIS)) {
                 recordingIntervalMillis =
-                        Integer.valueOf(extras.getString(EXTRA_KEY_PARAM_INTERVAL_MILLIS));
+                        Integer.valueOf(params.getString(EXTRA_KEY_INTERVAL_MILLIS));
+            }
+            if (params.containsKey(EXTRA_KEY_COORDINATES)) {
+                isCoordinatesReturnRequired =
+                        Boolean.valueOf(params.getString(EXTRA_KEY_COORDINATES));
+            }
+            if (params.containsKey(EXTRA_KEY_IMAGE)) {
+                isImageReturnRequired =
+                        Boolean.valueOf(params.getString(EXTRA_KEY_IMAGE));
             }
 
         }
@@ -384,9 +398,19 @@ public class AreaMapperActivity extends ActionBarActivity
 
                 Bundle result = new Bundle();
                 result.putString(
-                        EXTRA_KEY_RESPONSE_AREA,
+                        EXTRA_KEY_AREA,
                         Double.toString(areaCalculator.getArea())
                 );
+
+                if (isCoordinatesReturnRequired) {
+                    result.putString(
+                            EXTRA_KEY_COORDINATES,
+                            areaCalculator.getCoordinatesString()
+                    );
+                }
+                if (isImageReturnRequired) {
+                    // TODO: how to return image
+                }
 
                 Intent data = new Intent();
                 data.putExtra(
@@ -406,11 +430,11 @@ public class AreaMapperActivity extends ActionBarActivity
 
             case R.id.button_settings:
 
-                if (!animator.isRunning()) {
+                if (!settingsMenuAnimator.isRunning()) {
                     if (linearLayoutSettings.getAlpha() == 0) {
-                        animator.start();
+                        settingsMenuAnimator.start();
                     } else {
-                        animator.reverse();
+                        settingsMenuAnimator.reverse();
                     }
                 }
                 break;
@@ -471,8 +495,8 @@ public class AreaMapperActivity extends ActionBarActivity
 
         freezeOrientation();
 
-        animator.setDuration(ANIMATION_DURATION_MS);
-        animator.addUpdateListener(this);
+        settingsMenuAnimator.setDuration(ANIMATION_DURATION_MS);
+        settingsMenuAnimator.addUpdateListener(this);
 
         initializeViews();
 

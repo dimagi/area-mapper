@@ -61,6 +61,14 @@ public class AreaCalculator {
         LOG.trace("Exit");
     }
 
+    public double getArea() {
+        if (boundingLatLngs.size() > 3) {
+            return SphericalUtil.computeArea(boundingLatLngs);
+        } else {
+            return 0;
+        }
+    }
+
     public ArrayAdapter getArrayAdapter(Context context, int layoutId) {
         return new ArrayAdapter<>(
                 context,
@@ -69,12 +77,14 @@ public class AreaCalculator {
         );
     }
 
-    public double getArea() {
-        if (boundingLatLngs.size() > 3) {
-            return SphericalUtil.computeArea(boundingLatLngs);
-        } else {
-            return 0;
+    public String getCoordinatesString() {
+        String result = "";
+
+        for (LatLng latLng : boundingLatLngs) {
+            result += latLng.latitude + "," + latLng.longitude + "\n";
         }
+
+        return result;
     }
 
 }
