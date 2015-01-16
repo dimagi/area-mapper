@@ -63,6 +63,7 @@ public class AreaMapperActivity extends ActionBarActivity
     public static final String EXTRA_KEY_IMAGE = "image";
     public static final String EXTRA_KEY_INTERVAL_METERS = "interval_meters";
     public static final String EXTRA_KEY_INTERVAL_MILLIS = "interval_millis";
+    public static final String EXTRA_KEY_IS_REDO = "is_redo";
     public static final String EXTRA_KEY_RESPONSE_BUNDLE = "odk_intent_bundle";
 
     private ValueAnimator settingsMenuAnimator = ValueAnimator.ofFloat(0f, 1f);
@@ -79,6 +80,8 @@ public class AreaMapperActivity extends ActionBarActivity
     private boolean isImageReturnRequired;
 
     private boolean isRecording;
+
+    private boolean isRedo;
 
     private LinearLayout linearLayoutSettings;
 
@@ -181,6 +184,9 @@ public class AreaMapperActivity extends ActionBarActivity
                 isImageReturnRequired =
                         Boolean.valueOf(params.getString(EXTRA_KEY_IMAGE));
             }
+            if (params.containsKey(EXTRA_KEY_IS_REDO)) {
+                isRedo = params.getBoolean(EXTRA_KEY_IS_REDO);
+            }
 
         }
 
@@ -256,16 +262,6 @@ public class AreaMapperActivity extends ActionBarActivity
     }
 
     @Override
-    public void onBackPressed() {
-        LOG.trace("Entry");
-
-        setResult(ResultCode.CANCEL);
-        finish();
-
-        LOG.trace("Exit");
-    }
-
-    @Override
     public void onAreaChange(LatLng latLng, double area) {
         LOG.trace("Entry, area={}", area);
 
@@ -287,6 +283,16 @@ public class AreaMapperActivity extends ActionBarActivity
             );
 
         }
+
+        LOG.trace("Exit");
+    }
+
+    @Override
+    public void onBackPressed() {
+        LOG.trace("Entry");
+
+        setResult(ResultCode.CANCEL);
+        finish();
 
         LOG.trace("Exit");
     }
@@ -424,7 +430,13 @@ public class AreaMapperActivity extends ActionBarActivity
 
             case R.id.button_redo:
 
-                setResult(ResultCode.REDO);
+                setResult(
+                        ResultCode.REDO,
+                        new Intent().putExtra(
+                                EXTRA_KEY_IS_REDO,
+                                true
+                        )
+                );
                 finish();
                 break;
 
@@ -459,6 +471,12 @@ public class AreaMapperActivity extends ActionBarActivity
                 ,
                 this
         );
+
+        if (isRedo) {
+            onLocationChanged(
+                    LocationServices.FusedLocationApi.getLastLocation(googleApiClient)
+            );
+        }
 
         updateProgressState();
 

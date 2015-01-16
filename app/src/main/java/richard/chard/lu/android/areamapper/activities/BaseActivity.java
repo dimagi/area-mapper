@@ -37,6 +37,7 @@ public class BaseActivity extends ActionBarActivity {
 
                     case ResultCode.REDO:
 
+                        getIntent().putExtras(data);
                         startAreaMapperActivity();
                         break;
 
