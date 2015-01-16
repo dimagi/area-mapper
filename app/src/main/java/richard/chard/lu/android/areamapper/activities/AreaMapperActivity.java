@@ -5,9 +5,11 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -31,6 +33,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
 import richard.chard.lu.android.areamapper.AreaCalculator;
 import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.R;
@@ -44,18 +53,9 @@ public class AreaMapperActivity extends ActionBarActivity
         implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, AreaCalculator.Listener,
         LocationListener, OnMapReadyCallback, SeekBar.OnSeekBarChangeListener,
-        ValueAnimator.AnimatorUpdateListener {
-
-    private static final Logger LOG = Logger.create(AreaMapperActivity.class);
+        ValueAnimator.AnimatorUpdateListener, GoogleMap.SnapshotReadyCallback {
 
     private static final int ANIMATION_DURATION_MS = 150;
-
-    private static final int LOCATION_MIN_MAX_ACCURACY = 50;
-    private static final int LOCATION_MIN_MIN_ACCURACY = 10;
-
-    private static final float MAP_INITIAL_ZOOM_LEVEL = 16;
-
-    private static final float MAP_SCROLL_PX = 150;
 
     public static final String EXTRA_KEY_ACCURACY = "accuracy";
     public static final String EXTRA_KEY_AREA = "area";
@@ -65,6 +65,19 @@ public class AreaMapperActivity extends ActionBarActivity
     public static final String EXTRA_KEY_INTERVAL_MILLIS = "interval_millis";
     public static final String EXTRA_KEY_IS_REDO = "is_redo";
     public static final String EXTRA_KEY_RESPONSE_BUNDLE = "odk_intent_bundle";
+
+    private static final String IMAGE_FILE_FOLDER = "AreaMapperImages";
+    private static final String IMAGE_FILE_PREFIX = "map_image-";
+    private static final String IMAGE_FILE_SUFFIX = ".png";
+
+    private static final int LOCATION_MIN_MAX_ACCURACY = 50;
+    private static final int LOCATION_MIN_MIN_ACCURACY = 10;
+
+    private static final Logger LOG = Logger.create(AreaMapperActivity.class);
+
+    private static final float MAP_INITIAL_ZOOM_LEVEL = 16;
+
+    private static final float MAP_SCROLL_PX = 150;
 
     private ValueAnimator settingsMenuAnimator = ValueAnimator.ofFloat(0f, 1f);
 
@@ -88,6 +101,7 @@ public class AreaMapperActivity extends ActionBarActivity
     private int locationMinAccuracy = 35;
 
     private GoogleMap map;
+    private String mapSnapshotPath;
     private MapView mapView;
 
     private Location previousLocation;
@@ -398,6 +412,11 @@ public class AreaMapperActivity extends ActionBarActivity
                                 );
                     }
                 });
+
+                if (isImageReturnRequired) {
+                    findViewById(R.id.button_ok).setEnabled(false);
+                    map.snapshot(this);
+                }
                 break;
 
             case R.id.button_ok:
@@ -415,7 +434,10 @@ public class AreaMapperActivity extends ActionBarActivity
                     );
                 }
                 if (isImageReturnRequired) {
-                    // TODO: how to return image
+                    result.putString(
+                            EXTRA_KEY_IMAGE,
+                            mapSnapshotPath
+                    );
                 }
 
                 Intent data = new Intent();
@@ -651,6 +673,62 @@ public class AreaMapperActivity extends ActionBarActivity
         super.onSaveInstanceState(outState);
 
         mapView.onSaveInstanceState(outState);
+
+        LOG.trace("Exit");
+    }
+
+    @Override
+    public void onSnapshotReady(Bitmap snapshot) {
+        LOG.trace("Entry");
+
+        // Compress the bitmap
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        snapshot.compress(
+                Bitmap.CompressFormat.PNG,
+                100,
+                byteArrayOutputStream
+        );
+
+        // Check for image folder, create if needed
+
+        File imageFolder = new File(
+                Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES
+                ),
+                IMAGE_FILE_FOLDER
+        );
+        if (!imageFolder.mkdirs() && !imageFolder.isDirectory()) {
+            throw new RuntimeException("Failed to create directory "+imageFolder.getPath());
+        }
+
+        // Create unique file name
+
+        List<String> existingImageNames = Arrays.asList(imageFolder.list());
+
+        int imageFileIndex = 0;
+        while (existingImageNames.contains(
+                IMAGE_FILE_PREFIX + imageFileIndex + IMAGE_FILE_SUFFIX)) {
+            imageFileIndex++;
+        }
+
+        String imageFileName = IMAGE_FILE_PREFIX + imageFileIndex + IMAGE_FILE_SUFFIX;
+
+        // Write file
+
+        File imageFile = new File(imageFolder, imageFileName);
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
+            fileOutputStream.write(byteArrayOutputStream.toByteArray());
+            fileOutputStream.close();
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        }
+
+        mapSnapshotPath = imageFile.getPath();
+
+        findViewById(R.id.button_ok).setEnabled(true);
 
         LOG.trace("Exit");
     }
