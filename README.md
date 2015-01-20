@@ -2,8 +2,8 @@
 
 ## Callout intent input fields:
 * accuracy: String of integer meters; locations less accurate than this are ignored
-* coordinates: "true" if coordinates required in result
-* image: "true" if image file path required in result
+* coordinates: String "true" if coordinates required in result
+* image: String "true" if image file path required in result
 * interval_meters: String of integer meters; new location less than this far away from the previous location will be ignored
 * interval_millis: String of integer milliseconds; new location less than this much newer than previous location will be ignored
 
