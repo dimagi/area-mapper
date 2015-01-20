@@ -9,7 +9,6 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -33,17 +32,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
 import richard.chard.lu.android.areamapper.AreaCalculator;
 import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.R;
 import richard.chard.lu.android.areamapper.ResultCode;
+import richard.chard.lu.android.areamapper.SaveImageAsyncTask;
 import richard.chard.lu.android.areamapper.StopPropagationTouchListener;
 
 /**
@@ -53,7 +46,8 @@ public class AreaMapperActivity extends ActionBarActivity
         implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, AreaCalculator.Listener,
         LocationListener, OnMapReadyCallback, SeekBar.OnSeekBarChangeListener,
-        ValueAnimator.AnimatorUpdateListener, GoogleMap.SnapshotReadyCallback {
+        ValueAnimator.AnimatorUpdateListener, GoogleMap.SnapshotReadyCallback,
+        SaveImageAsyncTask.OnImageSavedListener {
 
     private static final int ANIMATION_DURATION_MS = 150;
 
@@ -563,6 +557,17 @@ public class AreaMapperActivity extends ActionBarActivity
     }
 
     @Override
+    public void onImageSaved(String filePath) {
+        LOG.trace("Entry, filePath={}", filePath);
+
+        mapSnapshotPath = filePath;
+
+        findViewById(R.id.button_ok).setEnabled(true);
+
+        LOG.trace("Exit");
+    }
+
+    @Override
     public void onLocationChanged(Location location) {
         LOG.trace("Entry");
 
@@ -681,54 +686,15 @@ public class AreaMapperActivity extends ActionBarActivity
     public void onSnapshotReady(Bitmap snapshot) {
         LOG.trace("Entry");
 
-        // Compress the bitmap
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        snapshot.compress(
+        new SaveImageAsyncTask(
+                snapshot,
                 Bitmap.CompressFormat.PNG,
                 100,
-                byteArrayOutputStream
-        );
-
-        // Check for image folder, create if needed
-
-        File imageFolder = new File(
-                Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES
-                ),
-                IMAGE_FILE_FOLDER
-        );
-        if (!imageFolder.mkdirs() && !imageFolder.isDirectory()) {
-            throw new RuntimeException("Failed to create directory "+imageFolder.getPath());
-        }
-
-        // Create unique file name
-
-        List<String> existingImageNames = Arrays.asList(imageFolder.list());
-
-        int imageFileIndex = 0;
-        while (existingImageNames.contains(
-                IMAGE_FILE_PREFIX + imageFileIndex + IMAGE_FILE_SUFFIX)) {
-            imageFileIndex++;
-        }
-
-        String imageFileName = IMAGE_FILE_PREFIX + imageFileIndex + IMAGE_FILE_SUFFIX;
-
-        // Write file
-
-        File imageFile = new File(imageFolder, imageFileName);
-
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
-            fileOutputStream.write(byteArrayOutputStream.toByteArray());
-            fileOutputStream.close();
-        } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
-        }
-
-        mapSnapshotPath = imageFile.getPath();
-
-        findViewById(R.id.button_ok).setEnabled(true);
+                IMAGE_FILE_FOLDER,
+                IMAGE_FILE_PREFIX,
+                IMAGE_FILE_SUFFIX,
+                this
+        ).execute();
 
         LOG.trace("Exit");
     }
