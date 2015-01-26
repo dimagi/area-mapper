@@ -61,11 +61,28 @@
 
             </FrameLayout>
 
-            <ListView
-                android:id="@+id/listview_coordinates"
+            <LinearLayout
+                android:id="@+id/linearlayout_result"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:orientation="vertical"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/textview_perimeter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:textSize="20sp"
+                    android:text="@string/perimeter_format" />
+
+                <ListView
+                    android:id="@+id/listview_coordinates"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

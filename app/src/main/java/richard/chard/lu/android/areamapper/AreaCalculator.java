@@ -69,6 +69,14 @@ public class AreaCalculator {
         }
     }
 
+    public double getPerimeter() {
+        if (boundingLatLngs.size() > 3) {
+            return SphericalUtil.computeLength(boundingLatLngs);
+        } else {
+            return 0;
+        }
+    }
+
     public ArrayAdapter getArrayAdapter(Context context, int layoutId) {
         return new ArrayAdapter<>(
                 context,

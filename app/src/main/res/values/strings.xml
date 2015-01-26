@@ -9,6 +9,7 @@
     <string name="location_accuracy_format">%1$d m</string>
     <string name="ok">OK</string>
     <string name="pause">PAUSE</string>
+    <string name="perimeter_format">Perimeter: %1$.3f m</string>
     <string name="redo">REDO</string>
     <string name="resume">RESUME</string>
     <string name="set_location_accuracy">Set minimum location accuracy</string>

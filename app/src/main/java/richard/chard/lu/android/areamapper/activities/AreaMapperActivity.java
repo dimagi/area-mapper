@@ -58,6 +58,7 @@ public class AreaMapperActivity extends ActionBarActivity
     public static final String EXTRA_KEY_INTERVAL_METERS = "interval_meters";
     public static final String EXTRA_KEY_INTERVAL_MILLIS = "interval_millis";
     public static final String EXTRA_KEY_IS_REDO = "is_redo";
+    public static final String EXTRA_KEY_PERIMETER = "perimeter";
     public static final String EXTRA_KEY_RESPONSE_BUNDLE = "odk_intent_bundle";
 
     private static final String IMAGE_FILE_FOLDER = "AreaMapperImages";
@@ -390,13 +391,18 @@ public class AreaMapperActivity extends ActionBarActivity
                         )
                 );
 
+                ((TextView) findViewById(R.id.textview_perimeter)).setText(
+                        getString(R.string.perimeter_format, areaCalculator.getPerimeter())
+                );
+
                 View frameLayoutMapContainer = findViewById(R.id.framelayout_map_container);
+                View linearLayoutResult = findViewById(R.id.linearlayout_result);
 
                 frameLayoutMapContainer.getLayoutParams().width = frameLayoutMapContainer.getWidth();
-                listViewCoordinates.getLayoutParams().width = frameLayoutMapContainer.getWidth();
+                linearLayoutResult.getLayoutParams().width = frameLayoutMapContainer.getWidth();
 
-                listViewCoordinates.setVisibility(View.VISIBLE);
-                listViewCoordinates.post(new Runnable() {
+                linearLayoutResult.setVisibility(View.VISIBLE);
+                linearLayoutResult.post(new Runnable() {
                     @Override
                     public void run() {
                         ((HorizontalScrollView) findViewById(R.id.scrollview_result))
@@ -419,6 +425,10 @@ public class AreaMapperActivity extends ActionBarActivity
                 result.putString(
                         EXTRA_KEY_AREA,
                         Double.toString(areaCalculator.getArea())
+                );
+                result.putString(
+                        EXTRA_KEY_PERIMETER,
+                        Double.toString(areaCalculator.getPerimeter())
                 );
 
                 if (isCoordinatesReturnRequired) {
