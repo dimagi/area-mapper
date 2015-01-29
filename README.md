@@ -9,5 +9,6 @@
 
 ## Result intent fields (all under bundle "odk_intent_bundle"):
 * area: String of double square meters; area of measured land
+* perimeter: String of double meters; perimeter length of measured land
 * coordinates: (may be absent) String of lat/lng doubles; perimeter coordinates of measured land
 * image: (may be absent) String of file path: path to saved image of land map
