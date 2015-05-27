@@ -19,17 +19,19 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
+
+    signingConfigs {
+        release
+    }
+
+
     defaultConfig {
         applicationId "richard.chard.lu.android.areamapper"
+        signingConfig signingConfigs.release
         minSdkVersion 11
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
-    }
-
-    signingConfigs {
-        release {
-        }
     }
 
     buildTypes {
