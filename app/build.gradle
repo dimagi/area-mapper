@@ -39,18 +39,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    if (project.hasProperty('keyAlias')) {
-        android.signingConfigs.release.keyAlias = keyAlias
-    }
-    if (project.hasProperty('storeFile  ')) {
-        android.signingConfigs.release.storeFile = storeFile
-    }
-    if (project.hasProperty('storePassword')) {
-        android.signingConfigs.release.storePassword = storePassword
-    }
-    if (project.hasProperty('keyPassword')) {
-        android.signingConfigs.release.keyPassword = keyPassword
-    }
 }
 
 dependencies {
