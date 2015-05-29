@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
 
-    beforeEvaluate { project ->
+    afterEvaluate { project ->
         def propsFile = rootProject.file('keystore.properties')
         def configName = 'release'
 
