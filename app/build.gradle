@@ -15,6 +15,7 @@ android {
             println "prop exists"
 
             println "keyAlias: " + props['keyAlias']
+            println "keyAlias: " + props['keyPassword']
 
             android.signingConfigs[configName].storeFile = file(props['storeFile'])
             android.signingConfigs[configName].storePassword = props['storePassword']
