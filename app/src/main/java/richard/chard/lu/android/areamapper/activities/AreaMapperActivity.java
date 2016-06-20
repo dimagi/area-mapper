@@ -64,6 +64,10 @@ public class AreaMapperActivity extends ActionBarActivity
     public static final String EXTRA_KEY_IS_REDO = "is_redo";
     public static final String EXTRA_KEY_PERIMETER = "perimeter";
     public static final String EXTRA_KEY_RESPONSE_BUNDLE = "odk_intent_bundle";
+    public static final String CASE_NAME = "case_name";
+    public static final String PLOT_TYPE = "plot_type";
+    public static final String CASE_LABEL = "case_label";
+    public static final String PLOT_LABEL = "plot_label";
 
     private static final String IMAGE_FILE_FOLDER = "AreaMapperImages";
     private static final String IMAGE_FILE_PREFIX = "map_image-";
@@ -77,6 +81,7 @@ public class AreaMapperActivity extends ActionBarActivity
     private static final float MAP_INITIAL_ZOOM_LEVEL = 16;
 
     private static final float MAP_SCROLL_PX = 150;
+
 
     private ValueAnimator settingsMenuAnimator = ValueAnimator.ofFloat(0f, 1f);
 
@@ -110,6 +115,14 @@ public class AreaMapperActivity extends ActionBarActivity
 
     private TextView textViewArea;
     private TextView textViewLocationAccuracy;
+    private TextView caseNameView;
+    private TextView plotTypeView;
+
+    private String caseName;
+    private String plotType;
+    private String caseNameLabel = "";
+    private String plotTypeLabel = "";
+
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void freezeOrientation() {
@@ -224,6 +237,19 @@ public class AreaMapperActivity extends ActionBarActivity
             if (params.containsKey(EXTRA_KEY_IS_REDO)) {
                 isRedo = params.getBoolean(EXTRA_KEY_IS_REDO);
             }
+            if (params.containsKey(CASE_NAME)) {
+                caseName = params.getString(CASE_NAME);
+            }
+            if (params.containsKey(PLOT_TYPE)) {
+                plotType = params.getString(PLOT_TYPE);
+            }
+            if (params.containsKey(PLOT_LABEL)) {
+                plotTypeLabel = params.getString(PLOT_LABEL);
+            }
+            if (params.containsKey(CASE_LABEL)) {
+                caseNameLabel = params.getString(CASE_LABEL);
+            }
+
 
         }
 
@@ -260,6 +286,18 @@ public class AreaMapperActivity extends ActionBarActivity
         mapView = (MapView) findViewById(R.id.mapview);
 
         mapView.getMapAsync(this);
+
+        if(caseName != null){
+            caseNameView = (TextView) findViewById(R.id.case_name);
+            caseNameView.setVisibility(View.VISIBLE);
+            caseNameView.setText(caseNameLabel + caseName);
+        }
+
+        if(plotType != null){
+            plotTypeView = (TextView) findViewById(R.id.plot_type);
+            plotTypeView.setVisibility(View.VISIBLE);
+            plotTypeView.setText(plotTypeLabel+plotType);
+        }
 
         buttonSettings = (ImageButton) findViewById(R.id.button_settings);
         buttonSettings.setOnClickListener(this);
