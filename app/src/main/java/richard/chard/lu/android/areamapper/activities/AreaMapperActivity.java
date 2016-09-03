@@ -56,7 +56,6 @@ public class AreaMapperActivity extends ActionBarActivity
     private static final int ANIMATION_DURATION_MS = 150;
 
     public static final String EXTRA_KEY_ACCURACY = "accuracy";
-    public static final String EXTRA_KEY_AREA = "area";
     public static final String EXTRA_KEY_COORDINATES = "coordinates";
     public static final String EXTRA_KEY_IMAGE = "image";
     public static final String EXTRA_KEY_INTERVAL_METERS = "interval_meters";
@@ -64,6 +63,7 @@ public class AreaMapperActivity extends ActionBarActivity
     public static final String EXTRA_KEY_IS_REDO = "is_redo";
     public static final String EXTRA_KEY_PERIMETER = "perimeter";
     public static final String EXTRA_KEY_RESPONSE_BUNDLE = "odk_intent_bundle";
+    public static final String INTENT_RESULT = "odk_intent_data";
 
     private static final String IMAGE_FILE_FOLDER = "AreaMapperImages";
     private static final String IMAGE_FILE_PREFIX = "map_image-";
@@ -450,10 +450,7 @@ public class AreaMapperActivity extends ActionBarActivity
             case R.id.button_ok:
 
                 Bundle result = new Bundle();
-                result.putString(
-                        EXTRA_KEY_AREA,
-                        Double.toString(areaCalculator.getArea())
-                );
+
                 result.putString(
                         EXTRA_KEY_PERIMETER,
                         Double.toString(areaCalculator.getPerimeter())
@@ -473,6 +470,9 @@ public class AreaMapperActivity extends ActionBarActivity
                 }
 
                 Intent data = new Intent();
+
+                data.putExtra(INTENT_RESULT, Double.toString(areaCalculator.getArea()));
+
                 data.putExtra(
                         EXTRA_KEY_RESPONSE_BUNDLE,
                         result
