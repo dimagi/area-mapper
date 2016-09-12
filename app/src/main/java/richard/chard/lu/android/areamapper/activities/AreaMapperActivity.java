@@ -143,7 +143,7 @@ public class AreaMapperActivity extends ActionBarActivity
         LOG.trace("Exit");
     }
 
-    private int getColor(int colorId) {
+    private int getColorResource(int colorId) {
         return getResources().getColor(colorId);
     }
 
@@ -154,10 +154,10 @@ public class AreaMapperActivity extends ActionBarActivity
         Polygon polygon =  map.addPolygon(
                 polygonOptions
                         .strokeColor(
-                                getColor(R.color.lightblue_500)
+                                getColorResource(R.color.lightblue_500)
                         )
                         .fillColor(
-                                getColor(R.color.lightblue_100_transparent_99)
+                                getColorResource(R.color.lightblue_100_transparent_99)
                         )
         );
 
