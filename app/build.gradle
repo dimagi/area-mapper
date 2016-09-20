@@ -28,10 +28,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile android.signingConfigs[configName].storeFile
-            storePassword android.signingConfigs[configName].storePassword
-            keyAlias android.signingConfigs[configName].keyAlias
-            keyPassword android.signingConfigs[configName].keyPassword
+            storeFile file(props['storeFile'])
+            storePassword props['storePassword']
+            keyAlias props['keyAlias']
+            keyPassword props['keyPassword']
         }
     }
 
