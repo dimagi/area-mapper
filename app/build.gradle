@@ -28,7 +28,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile ndroid.signingConfigs[configName].storeFile
+            storeFile android.signingConfigs[configName].storeFile
             storePassword android.signingConfigs[configName].storePassword
             keyAlias android.signingConfigs[configName].keyAlias
             keyPassword android.signingConfigs[configName].keyPassword
