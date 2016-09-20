@@ -1,5 +1,12 @@
 apply plugin: 'com.android.application'
 
+ext {
+    RELEASE_STORE_FILE = project.properties['RELEASE_STORE_FILE'] ?: "."
+    RELEASE_STORE_PASSWORD = project.properties['RELEASE_STORE_PASSWORD'] ?: ""
+    RELEASE_KEY_ALIAS = project.properties['RELEASE_KEY_ALIAS'] ?: ""
+    RELEASE_KEY_PASSWORD = project.properties['RELEASE_KEY_PASSWORD'] ?: ""
+}
+
 android {
 
     afterEvaluate { project ->
@@ -27,6 +34,8 @@ android {
 
 
     signingConfigs {
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
         release {
             storeFile file(props['storeFile'])
             storePassword props['storePassword']
