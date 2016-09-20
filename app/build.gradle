@@ -1,46 +1,43 @@
 apply plugin: 'com.android.application'
 
-ext {
-    RELEASE_STORE_FILE = project.properties['RELEASE_STORE_FILE'] ?: "."
-    RELEASE_STORE_PASSWORD = project.properties['RELEASE_STORE_PASSWORD'] ?: ""
-    RELEASE_KEY_ALIAS = project.properties['RELEASE_KEY_ALIAS'] ?: ""
-    RELEASE_KEY_PASSWORD = project.properties['RELEASE_KEY_PASSWORD'] ?: ""
+Map getProperties() {
+    def propsFile = rootProject.file('keystore.properties')
+    def configName = 'release'
+    def propsMap  = [:]
+
+    println "getProperties"
+
+    if (propsFile.exists() && android.signingConfigs.hasProperty(configName)) {
+        def props = new Properties()
+        props.load(new FileInputStream(propsFile))
+
+        println "prop exists"
+
+        println "keyAlias: " + props['keyAlias']
+        println "keyAlias: " + props['keyPassword']
+        println "file: " props['storeFile']
+
+        propsMap.storeFile = file(props['storeFile'])
+        propsMap.storePassword = props['storePassword']
+        propsMap.keyAlias = props['keyAlias']
+        propsMap.keyPassword = props['keyPassword']
+    }
+
+    return propsMap;
 }
 
 android {
-
-    afterEvaluate { project ->
-        def propsFile = rootProject.file('keystore.properties')
-        def configName = 'release'
-
-        println "beforeEvaluate"
-
-        if (propsFile.exists() && android.signingConfigs.hasProperty(configName)) {
-            def props = new Properties()
-            props.load(new FileInputStream(propsFile))
-
-            println "keyAlias: " + props['keyAlias']
-            println "keyAlias: " + props['keyPassword']
-
-            android.signingConfigs[configName].storeFile = file(props['storeFile'])
-            android.signingConfigs[configName].storePassword = props['storePassword']
-            android.signingConfigs[configName].keyAlias = props['keyAlias']
-            android.signingConfigs[configName].keyPassword = props['keyPassword']
-        }
-    }
 
     compileSdkVersion "Google Inc.:Google APIs:23"
     buildToolsVersion "23.0.3"
 
 
     signingConfigs {
-        def props = new Properties()
-        props.load(new FileInputStream(propsFile))
         release {
-            storeFile file(props['storeFile'])
-            storePassword props['storePassword']
-            keyAlias props['keyAlias']
-            keyPassword props['keyPassword']
+            storeFile getProperties().storeFile
+            storePassword getProperties().storePassword
+            keyAlias getProperties().keyAlias
+            keyPassword getProperties().keyPassword
         }
     }
 
@@ -58,7 +55,6 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled false
-            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
