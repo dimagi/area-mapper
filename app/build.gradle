@@ -12,8 +12,6 @@ android {
             def props = new Properties()
             props.load(new FileInputStream(propsFile))
 
-            println "prop exists"
-
             println "keyAlias: " + props['keyAlias']
             println "keyAlias: " + props['keyPassword']
 
@@ -29,7 +27,12 @@ android {
 
 
     signingConfigs {
-        release
+        release {
+            storeFile ndroid.signingConfigs[configName].storeFile
+            storePassword android.signingConfigs[configName].storePassword
+            keyAlias android.signingConfigs[configName].keyAlias
+            keyPassword android.signingConfigs[configName].keyPassword
+        }
     }
 
 
