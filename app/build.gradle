@@ -1,31 +1,5 @@
 apply plugin: 'com.android.application'
 
-Map getProperties() {
-    def propsFile = rootProject.file('keystore.properties')
-    def configName = 'release'
-    def propsMap  = [:]
-
-    println "getProperties"
-
-    if (propsFile.exists() && android.signingConfigs.hasProperty(configName)) {
-        def props = new Properties()
-        props.load(new FileInputStream(propsFile))
-
-        println "prop exists"
-
-        println "keyAlias: " + props['keyAlias']
-        println "keyAlias: " + props['keyPassword']
-        println "file: " props['storeFile']
-
-        propsMap.storeFile = file(props['storeFile'])
-        propsMap.storePassword = props['storePassword']
-        propsMap.keyAlias = props['keyAlias']
-        propsMap.keyPassword = props['keyPassword']
-    }
-
-    return propsMap;
-}
-
 android {
 
     compileSdkVersion "Google Inc.:Google APIs:23"
@@ -34,10 +8,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile getProperties().storeFile
-            storePassword getProperties().storePassword
-            keyAlias getProperties().keyAlias
-            keyPassword getProperties().keyPassword
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
         }
     }
 
