@@ -30,7 +30,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue "string", "google_maps_api_key", "[GOOGLE_PLAY_MAPS_API_KEY]"
+            resValue "string", "google_maps_api_key", GOOGLE_PLAY_MAPS_API_KEY
         }
     }
 }
