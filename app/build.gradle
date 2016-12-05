@@ -1,5 +1,16 @@
 apply plugin: 'com.android.application'
 
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.2'
+    }
+}
+
 android {
 
     compileSdkVersion "Google Inc.:Google APIs:23"
