@@ -13,8 +13,8 @@ buildscript {
 
 android {
 
-    compileSdkVersion "Google Inc.:Google APIs:23"
-    buildToolsVersion "23.0.3"
+    compileSdkVersion "Google Inc.:Google APIs:24"
+    buildToolsVersion "25.0.0"
 
 
     signingConfigs {
