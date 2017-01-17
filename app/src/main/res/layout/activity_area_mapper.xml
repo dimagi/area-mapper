@@ -5,6 +5,24 @@
     android:orientation="vertical"
     tools:context="richard.chard.lu.android.areamapper.activities.AreaMapperActivity">
 
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id = "@+id/case_name"
+            android:visibility="gone"
+            android:textSize="18sp"
+            android:layout_marginLeft="20dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id = "@+id/plot_type"
+            android:visibility="gone"
+            android:textSize="18sp"
+            android:layout_marginLeft="20dp"/>
+
+
     <include
         layout="@layout/relativelayout_area_and_settings" />
 
