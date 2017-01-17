@@ -37,6 +37,11 @@ android {
     }
 
     buildTypes {
+
+        debug {
+            resValue "string", "google_maps_api_key", AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY
+        }
+
         release {
             signingConfig signingConfigs.release
             minifyEnabled false
