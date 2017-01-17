@@ -1,35 +1,29 @@
 apply plugin: 'com.android.application'
 
-android {
-
-    afterEvaluate { project ->
-        def propsFile = rootProject.file('keystore.properties')
-        def configName = 'release'
-
-        println "beforeEvaluate"
-
-        if (propsFile.exists() && android.signingConfigs.hasProperty(configName)) {
-            def props = new Properties()
-            props.load(new FileInputStream(propsFile))
-
-            println "prop exists"
-
-            println "keyAlias: " + props['keyAlias']
-            println "keyAlias: " + props['keyPassword']
-
-            android.signingConfigs[configName].storeFile = file(props['storeFile'])
-            android.signingConfigs[configName].storePassword = props['storePassword']
-            android.signingConfigs[configName].keyAlias = props['keyAlias']
-            android.signingConfigs[configName].keyPassword = props['keyPassword']
-        }
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
     }
 
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.2'
+    }
+}
+
+android {
+
+    compileSdkVersion "Google Inc.:Google APIs:24"
+    buildToolsVersion "25.0.0"
 
 
     signingConfigs {
-        release
+        release {
+            storeFile file(AREA_MAPPER_RELEASE_STORE_FILE)
+            storePassword AREA_MAPPER_RELEASE_STORE_PASSWORD
+            keyAlias AREA_MAPPER_RELEASE_KEY_ALIAS
+            keyPassword AREA_MAPPER_RELEASE_KEY_PASSWORD
+        }
     }
 
 
@@ -38,15 +32,21 @@ android {
         signingConfig signingConfigs.release
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
+        versionCode 4
+        versionName "4.0"
     }
 
     buildTypes {
+
+        debug {
+            resValue "string", "google_maps_api_key", AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY
+        }
+
         release {
             signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue "string", "google_maps_api_key", AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY
         }
     }
 }
