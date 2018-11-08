@@ -10,6 +10,11 @@ ext {
     GOOGLE_PLAY_MAPS_API_KEY = project.properties['AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY'] ?: ""
 }
 
+repositories {
+    jcenter()
+    google()
+}
+
 android {
     compileSdkVersion 28
 
