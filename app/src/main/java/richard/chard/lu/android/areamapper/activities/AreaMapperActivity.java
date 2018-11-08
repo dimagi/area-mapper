@@ -551,7 +551,7 @@ public class AreaMapperActivity extends AppCompatActivity
 
     @SuppressLint("MissingPermission")
     private void requestLocationUpdates() {
-        if (checkForLocationPermissions()) {
+        if (isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     googleApiClient,
                     LocationRequest
@@ -619,22 +619,16 @@ public class AreaMapperActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         LOG.trace("Entry");
-
         mapView.onDestroy();
-
         super.onDestroy();
-
         LOG.trace("Exit");
     }
 
     @Override
     public void onImageSaved(String filePath) {
         LOG.trace("Entry, filePath={}", filePath);
-
         mapSnapshotPath = filePath;
-
         findViewById(R.id.button_ok).setEnabled(true);
-
         LOG.trace("Exit");
     }
 
