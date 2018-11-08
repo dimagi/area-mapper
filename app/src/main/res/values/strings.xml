@@ -15,5 +15,7 @@
     <string name="set_location_accuracy">Set minimum location accuracy</string>
     <string name="start">START</string>
     <string name="stop">STOP</string>
+    <string name="request_location_permission_dialog_title">Permission for Location Capture</string>
+    <string name="request_location_permission_dialog_message">Area Mapper needs permission to access your location to be able to show your current location on a map.</string>
 
 </resources>

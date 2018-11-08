@@ -1,18 +1,23 @@
 package richard.chard.lu.android.areamapper.activities;
 
+import android.Manifest;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -81,6 +86,7 @@ public class AreaMapperActivity extends AppCompatActivity
     private static final float MAP_INITIAL_ZOOM_LEVEL = 16;
 
     private static final float MAP_SCROLL_PX = 150;
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1001;
 
 
     private ValueAnimator settingsMenuAnimator = ValueAnimator.ofFloat(0f, 1f);
@@ -115,8 +121,6 @@ public class AreaMapperActivity extends AppCompatActivity
 
     private TextView textViewArea;
     private TextView textViewLocationAccuracy;
-    private TextView caseNameView;
-    private TextView plotTypeView;
 
     private String caseName;
     private String plotType;
@@ -150,7 +154,7 @@ public class AreaMapperActivity extends AppCompatActivity
                 break;
 
             default:
-                throw new RuntimeException("Unknown orientation: "+ORIENTATION);
+                throw new RuntimeException("Unknown orientation: " + ORIENTATION);
         }
 
         LOG.trace("Exit");
@@ -164,7 +168,7 @@ public class AreaMapperActivity extends AppCompatActivity
     public Polygon getPolygon(PolygonOptions polygonOptions) {
         LOG.trace("Entry");
 
-        Polygon polygon =  map.addPolygon(
+        Polygon polygon = map.addPolygon(
                 polygonOptions
                         .strokeColor(
                                 getColorResource(R.color.lightblue_500)
@@ -182,16 +186,8 @@ public class AreaMapperActivity extends AppCompatActivity
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        dialog.cancel();
-                    }
-                });
+                .setPositiveButton("Yes", (dialog, id) -> startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                .setNegativeButton("No", (dialog, id) -> dialog.cancel());
         final AlertDialog alert = builder.create();
         alert.show();
     }
@@ -199,9 +195,9 @@ public class AreaMapperActivity extends AppCompatActivity
     private void initializeParameters() {
         LOG.trace("Entry");
 
-        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+        final LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
-        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         }
 
@@ -277,40 +273,40 @@ public class AreaMapperActivity extends AppCompatActivity
         findViewById(R.id.button_redo).setOnClickListener(this);
         findViewById(R.id.button_ok).setOnClickListener(this);
 
-        textViewArea = (TextView) findViewById(R.id.textview_area);
+        textViewArea = findViewById(R.id.textview_area);
 
         textViewArea.setText(
                 getString(R.string.area_format, 0d)
         );
 
-        mapView = (MapView) findViewById(R.id.mapview);
+        mapView = findViewById(R.id.mapview);
 
         mapView.getMapAsync(this);
 
-        if(caseName != null){
-            caseNameView = (TextView) findViewById(R.id.case_name);
+        if (caseName != null) {
+            TextView caseNameView = findViewById(R.id.case_name);
             caseNameView.setVisibility(View.VISIBLE);
             caseNameView.setText(caseNameLabel + caseName);
         }
 
-        if(plotType != null){
-            plotTypeView = (TextView) findViewById(R.id.plot_type);
+        if (plotType != null) {
+            TextView plotTypeView = findViewById(R.id.plot_type);
             plotTypeView.setVisibility(View.VISIBLE);
-            plotTypeView.setText(plotTypeLabel+plotType);
+            plotTypeView.setText(plotTypeLabel + plotType);
         }
 
-        buttonSettings = (ImageButton) findViewById(R.id.button_settings);
+        buttonSettings = findViewById(R.id.button_settings);
         buttonSettings.setOnClickListener(this);
 
-        linearLayoutSettings = (LinearLayout) findViewById(R.id.linearlayout_settings);
+        linearLayoutSettings = findViewById(R.id.linearlayout_settings);
         linearLayoutSettings.setOnTouchListener(StopPropagationTouchListener.getInstance());
 
-        SeekBar seekBarLocationAccuracy = (SeekBar) findViewById(R.id.seekbar_location_accuracy);
+        SeekBar seekBarLocationAccuracy = findViewById(R.id.seekbar_location_accuracy);
         seekBarLocationAccuracy.setMax(LOCATION_MIN_MAX_ACCURACY - LOCATION_MIN_MIN_ACCURACY);
         seekBarLocationAccuracy.setProgress(locationMinAccuracy - LOCATION_MIN_MIN_ACCURACY);
         seekBarLocationAccuracy.setOnSeekBarChangeListener(this);
 
-        textViewLocationAccuracy = (TextView) findViewById(R.id.textview_location_accuracy);
+        textViewLocationAccuracy = findViewById(R.id.textview_location_accuracy);
         textViewLocationAccuracy.setText(
                 getString(
                         R.string.location_accuracy_format,
@@ -324,7 +320,7 @@ public class AreaMapperActivity extends AppCompatActivity
     @Override
     public void onAnimationUpdate(ValueAnimator valueAnimator) {
 
-        float value = (float) valueAnimator.getAnimatedValue();
+        float value = (float)valueAnimator.getAnimatedValue();
         linearLayoutSettings.setAlpha(value);
         buttonSettings.setRotation(value * 180);
 
@@ -449,7 +445,7 @@ public class AreaMapperActivity extends AppCompatActivity
                         this
                 );
 
-                ListView listViewCoordinates = (ListView) findViewById(R.id.listview_coordinates);
+                ListView listViewCoordinates = findViewById(R.id.listview_coordinates);
                 listViewCoordinates.setAdapter(
                         areaCalculator.getArrayAdapter(
                                 this,
@@ -457,7 +453,7 @@ public class AreaMapperActivity extends AppCompatActivity
                         )
                 );
 
-                ((TextView) findViewById(R.id.textview_perimeter)).setText(
+                ((TextView)findViewById(R.id.textview_perimeter)).setText(
                         getString(R.string.perimeter_format, areaCalculator.getPerimeter())
                 );
 
@@ -468,16 +464,11 @@ public class AreaMapperActivity extends AppCompatActivity
                 linearLayoutResult.getLayoutParams().width = frameLayoutMapContainer.getWidth();
 
                 linearLayoutResult.setVisibility(View.VISIBLE);
-                linearLayoutResult.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ((HorizontalScrollView) findViewById(R.id.scrollview_result))
-                                .smoothScrollBy(
-                                        mapView.getWidth() / 10,
-                                        0
-                                );
-                    }
-                });
+                linearLayoutResult.post(() -> ((HorizontalScrollView)findViewById(R.id.scrollview_result))
+                        .smoothScrollBy(
+                                mapView.getWidth() / 10,
+                                0
+                        ));
 
                 if (isImageReturnRequired) {
                     findViewById(R.id.button_ok).setEnabled(false);
@@ -544,7 +535,7 @@ public class AreaMapperActivity extends AppCompatActivity
                 break;
 
             default:
-                throw new RuntimeException("Unknown view id: "+view.getId());
+                throw new RuntimeException("Unknown view id: " + view.getId());
         }
 
         LOG.trace("Exit");
@@ -553,30 +544,34 @@ public class AreaMapperActivity extends AppCompatActivity
     @Override
     public void onConnected(Bundle bundle) {
         LOG.trace("Entry");
-
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                googleApiClient,
-                LocationRequest
-                        .create()
-                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                        .setInterval(0)
-                ,
-                this
-        );
-
-        if (isRedo) {
-            onLocationChanged(
-                    LocationServices.FusedLocationApi.getLastLocation(googleApiClient)
-            );
-        }
-
+        requestLocationUpdates();
         updateProgressState();
-
         LOG.trace("Exit");
     }
 
+    @SuppressLint("MissingPermission")
+    private void requestLocationUpdates() {
+        if (checkForLocationPermissions()) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    googleApiClient,
+                    LocationRequest
+                            .create()
+                            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                            .setInterval(0)
+                    ,
+                    this
+            );
+
+            if (isRedo) {
+                onLocationChanged(
+                        LocationServices.FusedLocationApi.getLastLocation(googleApiClient)
+                );
+            }
+        }
+    }
+
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         LOG.trace("Entry");
 
         setResult(ResultCode.ERROR);
@@ -653,11 +648,11 @@ public class AreaMapperActivity extends AppCompatActivity
             boolean addLocation = previousLocation == null ||
                     (
                             isRecording &&
-                            location.distanceTo(previousLocation) >=
-                                    location.getAccuracy() + previousLocation.getAccuracy()
-                            && location.getTime() - previousLocation.getTime() >=
+                                    location.distanceTo(previousLocation) >=
+                                            location.getAccuracy() + previousLocation.getAccuracy()
+                                    && location.getTime() - previousLocation.getTime() >=
                                     recordingIntervalMillis
-                            && location.distanceTo(previousLocation) >=
+                                    && location.distanceTo(previousLocation) >=
                                     recordingIntervalMeters
                     );
 
@@ -688,6 +683,8 @@ public class AreaMapperActivity extends AppCompatActivity
         LOG.trace("Exit");
     }
 
+
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap map) {
         LOG.trace("Entry");
@@ -698,11 +695,47 @@ public class AreaMapperActivity extends AppCompatActivity
 
         map.getUiSettings().setAllGesturesEnabled(false);
         map.getUiSettings().setZoomControlsEnabled(true);
-        map.setMyLocationEnabled(true);
+
+        if (checkForLocationPermissions()) {
+            map.setMyLocationEnabled(true);
+        }
 
         updateProgressState();
-
         LOG.trace("Exit");
+    }
+
+    private boolean checkForLocationPermissions() {
+        if (isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            return true;
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                buildPermissionRequestDialog();
+            } else {
+                requestLocationPermissions();
+            }
+            return false;
+        }
+    }
+
+    private boolean isPermissionGranted(String permission) {
+        return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void buildPermissionRequestDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.request_location_permission_dialog_title)
+                .setMessage(R.string.request_location_permission_dialog_message)
+                .setPositiveButton(R.string.ok, (dialog1, which) -> {
+                    requestLocationPermissions();
+                    dialog1.dismiss();
+                }).show();
+    }
+
+    private void requestLocationPermissions() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                REQUEST_CODE_LOCATION_PERMISSION);
     }
 
     @Override
@@ -829,7 +862,7 @@ public class AreaMapperActivity extends AppCompatActivity
             if (mapView.getVisibility() == View.INVISIBLE) {
 
                 mapView.setVisibility(View.VISIBLE);
-                ((TextView) findViewById(R.id.textview_progress)).setText(R.string.loading_gps);
+                ((TextView)findViewById(R.id.textview_progress)).setText(R.string.loading_gps);
 
             }
 
@@ -843,5 +876,23 @@ public class AreaMapperActivity extends AppCompatActivity
         }
 
         LOG.trace("Exit");
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION) {
+            for (int i = 0; i < permissions.length; i++) {
+                if (Manifest.permission.ACCESS_FINE_LOCATION.equals(permissions[i]) &&
+                        grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    if (map != null) {
+                        map.setMyLocationEnabled(true);
+                    }
+                    requestLocationUpdates();
+                }
+            }
+        }
     }
 }

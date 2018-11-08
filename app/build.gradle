@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 ext {
     // Obtained from ~/.gradle/gradle.properties on build server (mobile agent), or your local
     // ~/.gradle/gradle.properties file, or loads default empty strings if neither is present
-    RELEASE_STORE_FILE = project.properties['RELEASE_STORE_FILE'] ?: "."
-    RELEASE_STORE_PASSWORD = project.properties['RELEASE_STORE_PASSWORD'] ?: ""
-    RELEASE_KEY_ALIAS = project.properties['RELEASE_KEY_ALIAS'] ?: ""
-    RELEASE_KEY_PASSWORD = project.properties['RELEASE_KEY_PASSWORD'] ?: ""
-    GOOGLE_PLAY_MAPS_API_KEY = project.properties['GOOGLE_PLAY_MAPS_API_KEY'] ?: ""
+    RELEASE_STORE_FILE = project.properties['AREA_MAPPER_RELEASE_STORE_FILE'] ?: "."
+    RELEASE_STORE_PASSWORD = project.properties['AREA_MAPPER_RELEASE_STORE_PASSWORD'] ?: ""
+    RELEASE_KEY_ALIAS = project.properties['AREA_MAPPER_RELEASE_KEY_ALIAS'] ?: ""
+    RELEASE_KEY_PASSWORD = project.properties['AREA_MAPPER_RELEASE_KEY_PASSWORD'] ?: ""
+    GOOGLE_PLAY_MAPS_API_KEY = project.properties['AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY'] ?: ""
 }
 
 android {
@@ -35,22 +35,26 @@ android {
     buildTypes {
 
         debug {
-            resValue "string", "google_maps_api_key", GOOGLE_PLAY_MAPS_API_KEY
+            resValue "string", "google_maps_api_key", AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY
         }
 
         release {
             signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue "string", "google_maps_api_key", GOOGLE_PLAY_MAPS_API_KEY
+            resValue "string", "google_maps_api_key", AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY
         }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.google.android.gms:play-services:6.5.87'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.maps.android:android-maps-utils:0.3.4'
-    implementation 'ch.acra:acra:4.6.1'
 }
