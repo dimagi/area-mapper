@@ -2,7 +2,8 @@ package richard.chard.lu.android.areamapper.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+
 
 import org.acra.ACRA;
 import org.acra.ACRAConfiguration;
@@ -14,7 +15,7 @@ import richard.chard.lu.android.areamapper.FileUtil;
 import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.ResultCode;
 
-public class BaseActivity extends ActionBarActivity {
+public class BaseActivity extends AppCompatActivity {
 
     private static final Logger LOG = Logger.create(BaseActivity.class);
 

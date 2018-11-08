@@ -13,7 +13,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -46,7 +46,7 @@ import richard.chard.lu.android.areamapper.StopPropagationTouchListener;
 /**
  * @author Richard Lu
  */
-public class AreaMapperActivity extends ActionBarActivity
+public class AreaMapperActivity extends AppCompatActivity
         implements View.OnClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, AreaCalculator.Listener,
         LocationListener, OnMapReadyCallback, SeekBar.OnSeekBarChangeListener,
