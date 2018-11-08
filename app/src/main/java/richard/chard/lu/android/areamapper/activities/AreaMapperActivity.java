@@ -727,8 +727,8 @@ public class AreaMapperActivity extends AppCompatActivity
                 .setTitle(R.string.request_location_permission_dialog_title)
                 .setMessage(R.string.request_location_permission_dialog_message)
                 .setPositiveButton(R.string.ok, (dialog1, which) -> {
-                    requestLocationPermissions();
                     dialog1.dismiss();
+                    requestLocationPermissions();
                 }).show();
     }
 
