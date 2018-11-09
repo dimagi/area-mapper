@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
@@ -9,6 +11,7 @@ ext {
     RELEASE_KEY_ALIAS = project.properties['AREA_MAPPER_RELEASE_KEY_ALIAS'] ?: ""
     RELEASE_KEY_PASSWORD = project.properties['AREA_MAPPER_RELEASE_KEY_PASSWORD'] ?: ""
     GOOGLE_PLAY_MAPS_API_KEY = project.properties['AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY'] ?: ""
+    GOOGLE_SERVICES_API_KEY = project.properties['AREA_MAPPER_GOOGLE_SERVICES_API_KEY'] ?: ""
 }
 
 repositories {
@@ -65,6 +68,19 @@ dependencies {
     implementation 'com.google.maps.android:android-maps-utils:0.3.4'
     implementation 'com.google.firebase:firebase-core:16.0.5'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.6'
+}
+
+afterEvaluate {
+    processDebugGoogleServices.dependsOn injectGoogleServicesAPIKey
+    processReleaseGoogleServices.dependsOn injectGoogleServicesAPIKey
+}
+
+
+task injectGoogleServicesAPIKey(type: Copy) {
+    description = 'Injects the Google Services API key into the google-services.json file at runtime'
+    from file("templates/google-services.json")
+    filter(ReplaceTokens, tokens: [apiKey: project.ext.GOOGLE_SERVICES_API_KEY])
+    into projectDir
 }
 
 apply plugin: 'com.google.gms.google-services'
