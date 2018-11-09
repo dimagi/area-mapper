@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "318085509734",
+    "firebase_url": "https://area-mapper-14a32.firebaseio.com",
+    "project_id": "area-mapper-14a32",
+    "storage_bucket": "area-mapper-14a32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318085509734:android:4aabcacd2e2d50cb",
+        "android_client_info": {
+          "package_name": "richard.chard.lu.android.areamapper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "318085509734-a1uqfe4oapr252rehopsih4tmbs7ah9h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "richard.chard.lu.android.areamapper",
+            "certificate_hash": "71e4b77311ab18c9e387168720b904d89b98ddfc"
+          }
+        },
+        {
+          "client_id": "318085509734-ir0f44db4hod56pqsp4gi1ih92jsclng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHCH6qrwry3Lb-rCSkh3sPFrDdfoATVY8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "318085509734-ir0f44db4hod56pqsp4gi1ih92jsclng.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

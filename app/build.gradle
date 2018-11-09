@@ -1,28 +1,30 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
+ext {
+    // Obtained from ~/.gradle/gradle.properties on build server (mobile agent), or your local
+    // ~/.gradle/gradle.properties file, or loads default empty strings if neither is present
+    RELEASE_STORE_FILE = project.properties['AREA_MAPPER_RELEASE_STORE_FILE'] ?: "."
+    RELEASE_STORE_PASSWORD = project.properties['AREA_MAPPER_RELEASE_STORE_PASSWORD'] ?: ""
+    RELEASE_KEY_ALIAS = project.properties['AREA_MAPPER_RELEASE_KEY_ALIAS'] ?: ""
+    RELEASE_KEY_PASSWORD = project.properties['AREA_MAPPER_RELEASE_KEY_PASSWORD'] ?: ""
+    GOOGLE_PLAY_MAPS_API_KEY = project.properties['AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY'] ?: ""
+}
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-    }
+repositories {
+    jcenter()
+    google()
 }
 
 android {
-
-    compileSdkVersion "Google Inc.:Google APIs:24"
-    buildToolsVersion "25.0.0"
-
+    compileSdkVersion 28
 
     signingConfigs {
         release {
-            storeFile file(AREA_MAPPER_RELEASE_STORE_FILE)
-            storePassword AREA_MAPPER_RELEASE_STORE_PASSWORD
-            keyAlias AREA_MAPPER_RELEASE_KEY_ALIAS
-            keyPassword AREA_MAPPER_RELEASE_KEY_PASSWORD
+            storeFile file(project.ext.RELEASE_STORE_FILE)
+            storePassword project.ext.RELEASE_STORE_PASSWORD
+            keyAlias project.ext.RELEASE_KEY_ALIAS
+            keyPassword project.ext.RELEASE_KEY_PASSWORD
         }
     }
 
@@ -30,8 +32,8 @@ android {
     defaultConfig {
         applicationId "richard.chard.lu.android.areamapper"
         signingConfig signingConfigs.release
-        minSdkVersion 11
-        targetSdkVersion 21
+        minSdkVersion 14
+        targetSdkVersion 27
         versionCode 5
         versionName "5.0"
     }
@@ -49,12 +51,20 @@ android {
             resValue "string", "google_maps_api_key", AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'com.google.android.gms:play-services:6.5.87'
-    compile 'com.google.maps.android:android-maps-utils:0.3+'
-    compile 'ch.acra:acra:4.6.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.maps.android:android-maps-utils:0.3.4'
+    implementation 'com.google.firebase:firebase-core:16.0.5'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.6'
 }
+
+apply plugin: 'com.google.gms.google-services'
