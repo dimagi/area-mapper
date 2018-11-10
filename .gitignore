@@ -31,3 +31,4 @@ proguard/
 *.iml
 projectFilesBackup/*
 area-mapper-key.keystore
+app/google-services.json
