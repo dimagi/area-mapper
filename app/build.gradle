@@ -76,11 +76,13 @@ afterEvaluate {
 }
 
 
-task injectGoogleServicesAPIKey(type: Copy) {
+task injectGoogleServicesAPIKey {
     description = 'Injects the Google Services API key into the google-services.json file at runtime'
-    from file("templates/google-services.json")
-    filter(ReplaceTokens, tokens: [apiKey: project.ext.GOOGLE_SERVICES_API_KEY])
-    into projectDir
+    copy {
+        from file("templates/google-services.json")
+        filter(ReplaceTokens, tokens: [apiKey: project.ext.GOOGLE_SERVICES_API_KEY])
+        into projectDir
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'
