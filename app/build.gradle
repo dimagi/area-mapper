@@ -1,6 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.crashlytics'
 
 ext {
     // Obtained from ~/.gradle/gradle.properties on build server (mobile agent), or your local
