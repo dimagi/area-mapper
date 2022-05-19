@@ -1,7 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 
 ext {
     // Obtained from ~/.gradle/gradle.properties on build server (mobile agent), or your local
@@ -35,7 +35,7 @@ android {
     defaultConfig {
         applicationId "richard.chard.lu.android.areamapper"
         signingConfig signingConfigs.release
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 5
         versionName "5.0"
@@ -67,7 +67,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.maps.android:android-maps-utils:0.3.4'
     implementation 'com.google.firebase:firebase-core:16.0.5'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.6'
+    implementation 'com.google.firebase:firebase-crashlytics:17.4.1'
 }
 
 afterEvaluate {
