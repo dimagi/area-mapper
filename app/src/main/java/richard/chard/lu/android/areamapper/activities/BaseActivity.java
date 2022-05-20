@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.MapsInitializer.Renderer;
+
 import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.ResultCode;
 
@@ -63,6 +66,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         LOG.trace("Entry");
         super.onCreate(savedInstanceState);
+
         startAreaMapperActivity();
         LOG.trace("Exit");
     }
