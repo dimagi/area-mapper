@@ -2,15 +2,19 @@ package richard.chard.lu.android.areamapper.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.MapsInitializer.Renderer;
+import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 
 import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.ResultCode;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity implements OnMapsSdkInitializedCallback {
 
     private static final Logger LOG = Logger.create(BaseActivity.class);
 
@@ -86,5 +90,17 @@ public class BaseActivity extends AppCompatActivity {
         );
 
         LOG.trace("Exit");
+    }
+
+    @Override
+    public void onMapsSdkInitialized(@NonNull Renderer renderer) {
+        switch (renderer) {
+            case LATEST:
+                Log.d("MapsRenderer", "The latest version of the renderer is used.");
+                break;
+            case LEGACY:
+                Log.d("MapsRenderer", "The legacy version of the renderer is used.");
+                break;
+        }
     }
 }
