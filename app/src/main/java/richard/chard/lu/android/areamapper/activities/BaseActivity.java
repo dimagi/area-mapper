@@ -14,7 +14,7 @@ import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.ResultCode;
 
-public class BaseActivity extends AppCompatActivity implements OnMapsSdkInitializedCallback {
+public class BaseActivity extends AppCompatActivity {
 
     private static final Logger LOG = Logger.create(BaseActivity.class);
 
@@ -69,6 +69,9 @@ public class BaseActivity extends AppCompatActivity implements OnMapsSdkInitiali
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LOG.trace("Entry");
+
+        MapsInitializer.initialize(getApplicationContext(), Renderer.LATEST, null);
+
         super.onCreate(savedInstanceState);
 
         startAreaMapperActivity();
@@ -92,15 +95,5 @@ public class BaseActivity extends AppCompatActivity implements OnMapsSdkInitiali
         LOG.trace("Exit");
     }
 
-    @Override
-    public void onMapsSdkInitialized(@NonNull Renderer renderer) {
-        switch (renderer) {
-            case LATEST:
-                Log.d("MapsRenderer", "The latest version of the renderer is used.");
-                break;
-            case LEGACY:
-                Log.d("MapsRenderer", "The legacy version of the renderer is used.");
-                break;
-        }
-    }
+
 }
