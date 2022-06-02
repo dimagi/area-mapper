@@ -2,14 +2,8 @@ package richard.chard.lu.android.areamapper.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.MapsInitializer.Renderer;
-import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 
 import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.ResultCode;
@@ -69,9 +63,6 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LOG.trace("Entry");
-
-        MapsInitializer.initialize(getApplicationContext(), Renderer.LATEST, null);
-
         super.onCreate(savedInstanceState);
 
         startAreaMapperActivity();
