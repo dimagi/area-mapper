@@ -35,7 +35,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
@@ -682,8 +681,6 @@ public class AreaMapperActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap map) {
         LOG.trace("Entry");
-
-        MapsInitializer.initialize(getApplicationContext());
 
         this.map = map;
 
