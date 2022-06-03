@@ -19,6 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Environment;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -39,6 +41,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+
+import java.io.File;
+import java.nio.file.Path;
 
 import richard.chard.lu.android.areamapper.AreaCalculator;
 import richard.chard.lu.android.areamapper.Logger;
@@ -790,7 +795,7 @@ public class AreaMapperActivity extends AppCompatActivity
                 snapshot,
                 Bitmap.CompressFormat.PNG,
                 100,
-                IMAGE_FILE_FOLDER,
+                getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath() + File.separator + IMAGE_FILE_FOLDER,
                 IMAGE_FILE_PREFIX,
                 IMAGE_FILE_SUFFIX,
                 this

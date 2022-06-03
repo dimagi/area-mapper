@@ -69,12 +69,8 @@ public class SaveImageAsyncTask extends AsyncTask<Void, Void, Void> {
 
         // Check for image folder, create if needed
 
-        File imageFolder = new File(
-                Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES
-                ),
-                folderName
-        );
+        File imageFolder = new File(folderName);
+
         if (!imageFolder.mkdirs() && !imageFolder.isDirectory()) {
             throw new RuntimeException("Failed to create directory "+imageFolder.getPath());
         }
