@@ -13,12 +13,14 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.os.Environment;
 import android.view.View;
@@ -81,6 +83,7 @@ public class AreaMapperActivity extends AppCompatActivity
     private static final String IMAGE_FILE_FOLDER = "AreaMapperImages";
     private static final String IMAGE_FILE_PREFIX = "map_image-";
     private static final String IMAGE_FILE_SUFFIX = ".png";
+    private static final String IMAGE_PROVIDER_AUTHORITY = "richard.chard.lu.android.areamapper.fileprovider";
 
     private static final int LOCATION_MIN_MAX_ACCURACY = 50;
     private static final int LOCATION_MIN_MIN_ACCURACY = 10;
@@ -91,7 +94,6 @@ public class AreaMapperActivity extends AppCompatActivity
 
     private static final float MAP_SCROLL_PX = 150;
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1001;
-
 
     private ValueAnimator settingsMenuAnimator = ValueAnimator.ofFloat(0f, 1f);
 
@@ -119,6 +121,8 @@ public class AreaMapperActivity extends AppCompatActivity
     private MapView mapView;
 
     private Location previousLocation;
+
+    private Uri contentUri;
 
     private int recordingIntervalMeters = 0;
     private int recordingIntervalMillis = 0;
@@ -629,9 +633,12 @@ public class AreaMapperActivity extends AppCompatActivity
     }
 
     @Override
-    public void onImageSaved(String filePath) {
-        LOG.trace("Entry, filePath={}", filePath);
-        mapSnapshotPath = filePath;
+    public void onImageSaved(File imageFile) {
+        LOG.trace("Entry, imageFile={}", imageFile.getPath());
+
+        contentUri = FileProvider.getUriForFile(getApplicationContext(), IMAGE_PROVIDER_AUTHORITY, imageFile);
+
+        mapSnapshotPath = contentUri.toString();
         findViewById(R.id.button_ok).setEnabled(true);
         LOG.trace("Exit");
     }
