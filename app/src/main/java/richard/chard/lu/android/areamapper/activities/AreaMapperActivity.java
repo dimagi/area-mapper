@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -499,14 +500,17 @@ public class AreaMapperActivity extends AppCompatActivity
                             areaCalculator.getCoordinatesString()
                     );
                 }
+                Intent data = new Intent();
+
                 if (isImageReturnRequired) {
                     result.putString(
                             EXTRA_KEY_IMAGE,
                             mapSnapshotPath
                     );
-                }
 
-                Intent data = new Intent();
+                    data.setClipData(ClipData.newRawUri("", contentUri));
+                    data.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
 
                 data.putExtra(INTENT_RESULT, Double.toString(areaCalculator.getArea()));
 
