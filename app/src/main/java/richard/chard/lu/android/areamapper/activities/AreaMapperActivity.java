@@ -17,12 +17,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
-
 import android.os.Environment;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -31,6 +25,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -46,7 +46,6 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.io.File;
-import java.nio.file.Path;
 
 import richard.chard.lu.android.areamapper.AreaCalculator;
 import richard.chard.lu.android.areamapper.Logger;
@@ -806,13 +805,19 @@ public class AreaMapperActivity extends AppCompatActivity
                 snapshot,
                 Bitmap.CompressFormat.PNG,
                 100,
-                getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath() + File.separator + IMAGE_FILE_FOLDER,
+                getImageFolder(),
                 IMAGE_FILE_PREFIX,
                 IMAGE_FILE_SUFFIX,
                 this
         ).execute();
 
         LOG.trace("Exit");
+    }
+
+    // Returns the absolute path of the folder where the screenshot should be stored
+    // The parent folder is the application's directory in the external storage where it can securely store its files
+    private String getImageFolder() {
+        return getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath() + File.separator + IMAGE_FILE_FOLDER;
     }
 
     @Override
