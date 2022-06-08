@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -13,12 +14,10 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Environment;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -26,6 +25,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,6 +44,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+
+import java.io.File;
 
 import richard.chard.lu.android.areamapper.AreaCalculator;
 import richard.chard.lu.android.areamapper.Logger;
@@ -76,6 +83,7 @@ public class AreaMapperActivity extends AppCompatActivity
     private static final String IMAGE_FILE_FOLDER = "AreaMapperImages";
     private static final String IMAGE_FILE_PREFIX = "map_image-";
     private static final String IMAGE_FILE_SUFFIX = ".png";
+    private static final String IMAGE_PROVIDER_AUTHORITY = "richard.chard.lu.android.areamapper.fileprovider";
 
     private static final int LOCATION_MIN_MAX_ACCURACY = 50;
     private static final int LOCATION_MIN_MIN_ACCURACY = 10;
@@ -86,7 +94,6 @@ public class AreaMapperActivity extends AppCompatActivity
 
     private static final float MAP_SCROLL_PX = 150;
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1001;
-
 
     private ValueAnimator settingsMenuAnimator = ValueAnimator.ofFloat(0f, 1f);
 
@@ -114,6 +121,8 @@ public class AreaMapperActivity extends AppCompatActivity
     private MapView mapView;
 
     private Location previousLocation;
+
+    private Uri contentUri;
 
     private int recordingIntervalMeters = 0;
     private int recordingIntervalMillis = 0;
@@ -490,14 +499,17 @@ public class AreaMapperActivity extends AppCompatActivity
                             areaCalculator.getCoordinatesString()
                     );
                 }
+                Intent data = new Intent();
+
                 if (isImageReturnRequired) {
                     result.putString(
                             EXTRA_KEY_IMAGE,
                             mapSnapshotPath
                     );
-                }
 
-                Intent data = new Intent();
+                    data.setClipData(ClipData.newRawUri("", contentUri));
+                    data.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                }
 
                 data.putExtra(INTENT_RESULT, Double.toString(areaCalculator.getArea()));
 
@@ -624,9 +636,12 @@ public class AreaMapperActivity extends AppCompatActivity
     }
 
     @Override
-    public void onImageSaved(String filePath) {
-        LOG.trace("Entry, filePath={}", filePath);
-        mapSnapshotPath = filePath;
+    public void onImageSaved(File imageFile) {
+        LOG.trace("Entry, imageFile={}", imageFile.getPath());
+
+        contentUri = FileProvider.getUriForFile(getApplicationContext(), IMAGE_PROVIDER_AUTHORITY, imageFile);
+
+        mapSnapshotPath = contentUri.toString();
         findViewById(R.id.button_ok).setEnabled(true);
         LOG.trace("Exit");
     }
@@ -790,13 +805,19 @@ public class AreaMapperActivity extends AppCompatActivity
                 snapshot,
                 Bitmap.CompressFormat.PNG,
                 100,
-                IMAGE_FILE_FOLDER,
+                getImageFolder(),
                 IMAGE_FILE_PREFIX,
                 IMAGE_FILE_SUFFIX,
                 this
         ).execute();
 
         LOG.trace("Exit");
+    }
+
+    // Returns the absolute path of the folder where the screenshot should be stored
+    // The parent folder is the application's directory in the external storage where it can securely store its files
+    private String getImageFolder() {
+        return getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath() + File.separator + IMAGE_FILE_FOLDER;
     }
 
     @Override

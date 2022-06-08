@@ -18,7 +18,7 @@ public class SaveImageAsyncTask extends AsyncTask<Void, Void, Void> {
 
     public interface OnImageSavedListener {
 
-        public void onImageSaved(String filePath);
+        public void onImageSaved(File imageFile);
 
     }
 
@@ -31,7 +31,7 @@ public class SaveImageAsyncTask extends AsyncTask<Void, Void, Void> {
     private final String filePrefix;
     private final String fileSuffix;
     private final OnImageSavedListener listener;
-    private String filePath;
+    private File imageFile;
 
     public SaveImageAsyncTask(
             Bitmap bitmap,
@@ -69,12 +69,8 @@ public class SaveImageAsyncTask extends AsyncTask<Void, Void, Void> {
 
         // Check for image folder, create if needed
 
-        File imageFolder = new File(
-                Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES
-                ),
-                folderName
-        );
+        File imageFolder = new File(folderName);
+
         if (!imageFolder.mkdirs() && !imageFolder.isDirectory()) {
             throw new RuntimeException("Failed to create directory "+imageFolder.getPath());
         }
@@ -93,7 +89,7 @@ public class SaveImageAsyncTask extends AsyncTask<Void, Void, Void> {
 
         // Write file
 
-        File imageFile = new File(imageFolder, imageFileName);
+        imageFile = new File(imageFolder, imageFileName);
 
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
@@ -103,8 +99,6 @@ public class SaveImageAsyncTask extends AsyncTask<Void, Void, Void> {
             throw new RuntimeException(ioe);
         }
 
-        filePath = imageFile.getPath();
-
         LOG.trace("Exit");
         return null;
     }
@@ -113,7 +107,7 @@ public class SaveImageAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         LOG.trace("Entry");
 
-        listener.onImageSaved(filePath);
+        listener.onImageSaved(imageFile);
 
         LOG.trace("Exit");
     }
