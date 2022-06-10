@@ -6,12 +6,12 @@ apply plugin: 'com.google.firebase.crashlytics'
 ext {
     // Obtained from ~/.gradle/gradle.properties on build server (mobile agent), or your local
     // ~/.gradle/gradle.properties file, or loads default empty strings if neither is present
-    RELEASE_STORE_FILE = project.properties['AREA_MAPPER_RELEASE_STORE_FILE'] ?: "."
-    RELEASE_STORE_PASSWORD = project.properties['AREA_MAPPER_RELEASE_STORE_PASSWORD'] ?: ""
-    RELEASE_KEY_ALIAS = project.properties['AREA_MAPPER_RELEASE_KEY_ALIAS'] ?: ""
-    RELEASE_KEY_PASSWORD = project.properties['AREA_MAPPER_RELEASE_KEY_PASSWORD'] ?: ""
-    GOOGLE_PLAY_MAPS_API_KEY = project.properties['AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY'] ?: ""
-    GOOGLE_SERVICES_API_KEY = project.properties['AREA_MAPPER_GOOGLE_SERVICES_API_KEY'] ?: ""
+    RELEASE_STORE_FILE = project.properties['RELEASE_STORE_FILE'] ?: "."
+    RELEASE_STORE_PASSWORD = project.properties['RELEASE_STORE_PASSWORD'] ?: ""
+    RELEASE_KEY_ALIAS = project.properties['RELEASE_KEY_ALIAS'] ?: ""
+    RELEASE_KEY_PASSWORD = project.properties['RELEASE_KEY_PASSWORD'] ?: ""
+    GOOGLE_PLAY_MAPS_API_KEY = project.properties['GOOGLE_PLAY_MAPS_API_KEY'] ?: ""
+    GOOGLE_SERVICES_API_KEY = project.properties['GOOGLE_SERVICES_API_KEY'] ?: ""
 }
 
 repositories {
@@ -44,14 +44,14 @@ android {
     buildTypes {
 
         debug {
-            resValue "string", "google_maps_api_key", AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY
+            resValue "string", "google_maps_api_key", GOOGLE_PLAY_MAPS_API_KEY
         }
 
         release {
             signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            resValue "string", "google_maps_api_key", AREA_MAPPER_GOOGLE_PLAY_MAPS_API_KEY
+            resValue "string", "google_maps_api_key", GOOGLE_PLAY_MAPS_API_KEY
         }
     }
     compileOptions {
