@@ -20,7 +20,7 @@ repositories {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     signingConfigs {
         release {
@@ -36,7 +36,7 @@ android {
         applicationId "richard.chard.lu.android.areamapper"
         signingConfig signingConfigs.release
         minSdkVersion 19
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode 6
         versionName "6.0"
     }
