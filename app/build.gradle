@@ -20,6 +20,7 @@ repositories {
 }
 
 android {
+    namespace 'richard.chard.lu.android.areamapper'
     compileSdk 36
 
     signingConfigs {
