@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="ActionButton">
         <item name="android:minWidth">@dimen/action_button_min_width</item>

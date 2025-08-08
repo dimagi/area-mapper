@@ -12,6 +12,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Insets;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.view.WindowInsets;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -47,6 +49,9 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.io.File;
 
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import richard.chard.lu.android.areamapper.AreaCalculator;
 import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.R;
@@ -624,6 +629,25 @@ public class AreaMapperActivity extends AppCompatActivity
 
         mapView.onCreate(savedInstanceState);
 
+        // Edge-to-edge insets handling for Android 15 and above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            View rootLayout = findViewById(R.id.area_mapper_root_layout);
+
+            ViewCompat.setOnApplyWindowInsetsListener(rootLayout, new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View view, @NonNull WindowInsetsCompat insets) {
+                    WindowInsets windowInsets = view.getRootWindowInsets();
+
+                    if (windowInsets != null) {
+                        Insets systemBars = windowInsets.getSystemWindowInsets();
+                        // Apply padding so content doesn't overlap with system bars
+                        view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                    }
+                    return insets;
+                }
+            });
+        }
         LOG.trace("Exit");
     }
 
