@@ -52,6 +52,7 @@ import java.io.File;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import richard.chard.lu.android.areamapper.AreaCalculator;
 import richard.chard.lu.android.areamapper.Logger;
 import richard.chard.lu.android.areamapper.R;
@@ -610,6 +611,12 @@ public class AreaMapperActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         LOG.trace("Entry");
 
+        // Edge-to-edge extends the view behind system bars and given that the app theme is Light, this is to
+        // ensure that the status bar appearance is set to light mode
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            WindowInsetsControllerCompat controller = new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
+            controller.setAppearanceLightStatusBars(true);
+        }
         initializeParameters();
 
         super.onCreate(savedInstanceState);
