@@ -638,16 +638,16 @@ public class AreaMapperActivity extends AppCompatActivity
 
         // Edge-to-edge insets handling for Android 15 and above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-            View rootLayout = findViewById(R.id.area_mapper_root_layout);
+            View contentView = findViewById(android.R.id.content);
 
-            ViewCompat.setOnApplyWindowInsetsListener(rootLayout, new OnApplyWindowInsetsListener() {
+            ViewCompat.setOnApplyWindowInsetsListener(contentView, new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View view, @NonNull WindowInsetsCompat insets) {
                     WindowInsets windowInsets = view.getRootWindowInsets();
 
                     if (windowInsets != null) {
-                        Insets systemBars = windowInsets.getSystemWindowInsets();
+                        Insets systemBars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
                         // Apply padding so content doesn't overlap with system bars
                         view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
                     }
