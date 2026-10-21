@@ -446,12 +446,6 @@ public class AreaMapperActivity extends AppCompatActivity
 
             case R.id.button_stop:
 
-                findViewById(R.id.button_resume).setVisibility(View.GONE);
-                findViewById(R.id.button_pause).setVisibility(View.GONE);
-                findViewById(R.id.button_stop).setVisibility(View.GONE);
-                findViewById(R.id.button_redo).setVisibility(View.VISIBLE);
-                findViewById(R.id.button_ok).setVisibility(View.VISIBLE);
-
                 isRecording = false;
 
                 LocationServices.FusedLocationApi.removeLocationUpdates(
@@ -459,30 +453,7 @@ public class AreaMapperActivity extends AppCompatActivity
                         this
                 );
 
-                ListView listViewCoordinates = findViewById(R.id.listview_coordinates);
-                listViewCoordinates.setAdapter(
-                        areaCalculator.getArrayAdapter(
-                                this,
-                                android.R.layout.simple_list_item_1
-                        )
-                );
-
-                ((TextView)findViewById(R.id.textview_perimeter)).setText(
-                        getString(R.string.perimeter_format, areaCalculator.getPerimeter())
-                );
-
-                View frameLayoutMapContainer = findViewById(R.id.framelayout_map_container);
-                View linearLayoutResult = findViewById(R.id.linearlayout_result);
-
-                frameLayoutMapContainer.getLayoutParams().width = frameLayoutMapContainer.getWidth();
-                linearLayoutResult.getLayoutParams().width = frameLayoutMapContainer.getWidth();
-
-                linearLayoutResult.setVisibility(View.VISIBLE);
-                linearLayoutResult.post(() -> ((HorizontalScrollView)findViewById(R.id.scrollview_result))
-                        .smoothScrollBy(
-                                mapView.getWidth() / 10,
-                                0
-                        ));
+                showResult();
 
                 if (isImageReturnRequired) {
                     findViewById(R.id.button_ok).setEnabled(false);
@@ -554,6 +525,43 @@ public class AreaMapperActivity extends AppCompatActivity
             default:
                 throw new RuntimeException("Unknown view id: " + view.getId());
         }
+
+        LOG.trace("Exit");
+    }
+
+    private void showResult() {
+        LOG.trace("Entry");
+
+        findViewById(R.id.button_resume).setVisibility(View.GONE);
+        findViewById(R.id.button_pause).setVisibility(View.GONE);
+        findViewById(R.id.button_stop).setVisibility(View.GONE);
+        findViewById(R.id.button_redo).setVisibility(View.VISIBLE);
+        findViewById(R.id.button_ok).setVisibility(View.VISIBLE);
+
+        ListView listViewCoordinates = findViewById(R.id.listview_coordinates);
+        listViewCoordinates.setAdapter(
+                areaCalculator.getArrayAdapter(
+                        this,
+                        android.R.layout.simple_list_item_1
+                )
+        );
+
+        ((TextView)findViewById(R.id.textview_perimeter)).setText(
+                getString(R.string.perimeter_format, areaCalculator.getPerimeter())
+        );
+
+        View frameLayoutMapContainer = findViewById(R.id.framelayout_map_container);
+        View linearLayoutResult = findViewById(R.id.linearlayout_result);
+
+        frameLayoutMapContainer.getLayoutParams().width = frameLayoutMapContainer.getWidth();
+        linearLayoutResult.getLayoutParams().width = frameLayoutMapContainer.getWidth();
+
+        linearLayoutResult.setVisibility(View.VISIBLE);
+        linearLayoutResult.post(() -> ((HorizontalScrollView)findViewById(R.id.scrollview_result))
+                .smoothScrollBy(
+                        mapView.getWidth() / 10,
+                        0
+                ));
 
         LOG.trace("Exit");
     }
