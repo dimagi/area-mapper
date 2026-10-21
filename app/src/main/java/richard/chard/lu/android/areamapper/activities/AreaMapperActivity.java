@@ -48,6 +48,7 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
@@ -101,6 +102,16 @@ public class AreaMapperActivity extends AppCompatActivity
     private static final float MAP_SCROLL_PX = 150;
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1001;
 
+    private static final String STATE_KEY_CONTENT_URI = "content_uri";
+    private static final String STATE_KEY_IS_CAMERA_INITIALLY_POSITIONED = "is_camera_initially_positioned";
+    private static final String STATE_KEY_IS_RECORDING = "is_recording";
+    private static final String STATE_KEY_IS_STARTED = "is_started";
+    private static final String STATE_KEY_IS_STOPPED = "is_stopped";
+    private static final String STATE_KEY_LAT_LNGS = "lat_lngs";
+    private static final String STATE_KEY_LOCATION_MIN_ACCURACY = "location_min_accuracy";
+    private static final String STATE_KEY_MAP_SNAPSHOT_PATH = "map_snapshot_path";
+    private static final String STATE_KEY_PREVIOUS_LOCATION = "previous_location";
+
     private ValueAnimator settingsMenuAnimator = ValueAnimator.ofFloat(0f, 1f);
 
     private AreaCalculator areaCalculator = new AreaCalculator(this);
@@ -117,6 +128,9 @@ public class AreaMapperActivity extends AppCompatActivity
     private boolean isRecording;
 
     private boolean isRedo;
+
+    private boolean isStarted;
+    private boolean isStopped;
 
     private LinearLayout linearLayoutSettings;
 
@@ -433,6 +447,7 @@ public class AreaMapperActivity extends AppCompatActivity
                 findViewById(R.id.button_pause).setVisibility(View.VISIBLE);
                 findViewById(R.id.button_stop).setVisibility(View.VISIBLE);
 
+                isStarted = true;
                 isRecording = true;
                 break;
 
@@ -447,6 +462,7 @@ public class AreaMapperActivity extends AppCompatActivity
             case R.id.button_stop:
 
                 isRecording = false;
+                isStopped = true;
 
                 LocationServices.FusedLocationApi.removeLocationUpdates(
                         googleApiClient,
@@ -456,7 +472,6 @@ public class AreaMapperActivity extends AppCompatActivity
                 showResult();
 
                 if (isImageReturnRequired) {
-                    findViewById(R.id.button_ok).setEnabled(false);
                     map.snapshot(this);
                 }
                 break;
@@ -532,6 +547,7 @@ public class AreaMapperActivity extends AppCompatActivity
     private void showResult() {
         LOG.trace("Entry");
 
+        findViewById(R.id.button_start).setVisibility(View.GONE);
         findViewById(R.id.button_resume).setVisibility(View.GONE);
         findViewById(R.id.button_pause).setVisibility(View.GONE);
         findViewById(R.id.button_stop).setVisibility(View.GONE);
@@ -562,6 +578,50 @@ public class AreaMapperActivity extends AppCompatActivity
                         mapView.getWidth() / 10,
                         0
                 ));
+
+        if (isImageReturnRequired && mapSnapshotPath == null) {
+            findViewById(R.id.button_ok).setEnabled(false);
+        }
+
+        LOG.trace("Exit");
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        LOG.trace("Entry");
+
+        ArrayList<LatLng> latLngs = savedInstanceState.getParcelableArrayList(STATE_KEY_LAT_LNGS);
+        if (latLngs != null) {
+            areaCalculator.restoreLatLngs(latLngs);
+        }
+
+        contentUri = savedInstanceState.getParcelable(STATE_KEY_CONTENT_URI);
+        isCameraInitiallyPositioned = savedInstanceState.getBoolean(STATE_KEY_IS_CAMERA_INITIALLY_POSITIONED);
+        isRecording = savedInstanceState.getBoolean(STATE_KEY_IS_RECORDING);
+        isStarted = savedInstanceState.getBoolean(STATE_KEY_IS_STARTED);
+        isStopped = savedInstanceState.getBoolean(STATE_KEY_IS_STOPPED);
+        locationMinAccuracy = savedInstanceState.getInt(STATE_KEY_LOCATION_MIN_ACCURACY, locationMinAccuracy);
+        mapSnapshotPath = savedInstanceState.getString(STATE_KEY_MAP_SNAPSHOT_PATH);
+        previousLocation = savedInstanceState.getParcelable(STATE_KEY_PREVIOUS_LOCATION);
+
+        LOG.trace("Exit");
+    }
+
+    private void restoreViews() {
+        LOG.trace("Entry");
+
+        textViewArea.setText(
+                getString(R.string.area_format, areaCalculator.getArea())
+        );
+
+        if (isStopped) {
+            // The result panel is sized from the map container's width, which is only known after layout
+            findViewById(R.id.framelayout_map_container).post(this::showResult);
+        } else if (isStarted) {
+            findViewById(R.id.button_start).setVisibility(View.GONE);
+            findViewById(R.id.button_stop).setVisibility(View.VISIBLE);
+            findViewById(R.id.button_pause).setVisibility(isRecording ? View.VISIBLE : View.GONE);
+            findViewById(R.id.button_resume).setVisibility(isRecording ? View.GONE : View.VISIBLE);
+        }
 
         LOG.trace("Exit");
     }
@@ -634,7 +694,17 @@ public class AreaMapperActivity extends AppCompatActivity
         settingsMenuAnimator.setDuration(ANIMATION_DURATION_MS);
         settingsMenuAnimator.addUpdateListener(this);
 
+        // Orientation can't be locked on large screens from Android 16 onwards, so the recording
+        // needs to survive the activity being recreated on rotation
+        if (savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        }
+
         initializeViews();
+
+        if (savedInstanceState != null) {
+            restoreViews();
+        }
 
         googleApiClient = new GoogleApiClient.Builder(getApplicationContext())
                 .addApi(LocationServices.API)
@@ -745,6 +815,13 @@ public class AreaMapperActivity extends AppCompatActivity
             map.setMyLocationEnabled(true);
         }
 
+        // Redraws any points restored after the activity was recreated
+        areaCalculator.drawPolygon();
+
+        if (isStopped && isImageReturnRequired && mapSnapshotPath == null) {
+            map.setOnMapLoadedCallback(() -> this.map.snapshot(this));
+        }
+
         updateProgressState();
         LOG.trace("Exit");
     }
@@ -832,6 +909,16 @@ public class AreaMapperActivity extends AppCompatActivity
         super.onSaveInstanceState(outState);
 
         mapView.onSaveInstanceState(outState);
+
+        outState.putParcelableArrayList(STATE_KEY_LAT_LNGS, areaCalculator.getLatLngs());
+        outState.putParcelable(STATE_KEY_CONTENT_URI, contentUri);
+        outState.putBoolean(STATE_KEY_IS_CAMERA_INITIALLY_POSITIONED, isCameraInitiallyPositioned);
+        outState.putBoolean(STATE_KEY_IS_RECORDING, isRecording);
+        outState.putBoolean(STATE_KEY_IS_STARTED, isStarted);
+        outState.putBoolean(STATE_KEY_IS_STOPPED, isStopped);
+        outState.putInt(STATE_KEY_LOCATION_MIN_ACCURACY, locationMinAccuracy);
+        outState.putString(STATE_KEY_MAP_SNAPSHOT_PATH, mapSnapshotPath);
+        outState.putParcelable(STATE_KEY_PREVIOUS_LOCATION, previousLocation);
 
         LOG.trace("Exit");
     }

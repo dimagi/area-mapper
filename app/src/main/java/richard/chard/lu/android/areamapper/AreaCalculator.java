@@ -61,6 +61,33 @@ public class AreaCalculator {
         LOG.trace("Exit");
     }
 
+    public ArrayList<LatLng> getLatLngs() {
+        return boundingLatLngs;
+    }
+
+    // Restores previously recorded points, the polygon is only redrawn when drawPolygon() is called
+    public void restoreLatLngs(ArrayList<LatLng> latLngs) {
+        LOG.trace("Entry");
+
+        boundingLatLngs = latLngs;
+        polygon = null;
+
+        LOG.trace("Exit");
+    }
+
+    public void drawPolygon() {
+        LOG.trace("Entry");
+
+        if (!boundingLatLngs.isEmpty()) {
+            polygon = listener.getPolygon(
+                    new PolygonOptions()
+                            .addAll(boundingLatLngs)
+            );
+        }
+
+        LOG.trace("Exit");
+    }
+
     public double getArea() {
         if (boundingLatLngs.size() > 3) {
             return SphericalUtil.computeArea(boundingLatLngs);
