@@ -21,7 +21,7 @@ repositories {
 
 android {
     namespace 'richard.chard.lu.android.areamapper'
-    compileSdk 36
+    compileSdk 37
 
     signingConfigs {
         release {
@@ -37,7 +37,7 @@ android {
         applicationId "richard.chard.lu.android.areamapper"
         signingConfig signingConfigs.release
         minSdkVersion 21
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode 9
         versionName "9.0"
     }
