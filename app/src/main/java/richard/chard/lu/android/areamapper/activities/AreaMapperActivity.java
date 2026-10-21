@@ -3,7 +3,6 @@ package richard.chard.lu.android.areamapper.activities;
 import android.Manifest;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
@@ -156,29 +155,17 @@ public class AreaMapperActivity extends AppCompatActivity
     private String plotTypeLabel = "";
 
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void freezeOrientation() {
         LOG.trace("Entry");
 
         final int ORIENTATION = getResources().getConfiguration().orientation;
 
-        final int PORTRAIT = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ?
-                ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT :
-                ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT;
-
-        final int LANDSCAPE = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 ?
-                ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE :
-                ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE;
-
         switch (ORIENTATION) {
             case Configuration.ORIENTATION_PORTRAIT:
-
-                setRequestedOrientation(PORTRAIT);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT);
                 break;
-
             case Configuration.ORIENTATION_LANDSCAPE:
-
-                setRequestedOrientation(LANDSCAPE);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE);
                 break;
 
             default:
